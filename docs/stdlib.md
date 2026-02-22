@@ -14,6 +14,8 @@ Goal: reduce boilerplate for real scripts (validation, map access, text assembly
 #call core::import alias="std_res" path="../stdlib/result.imp";
 #call core::import alias="std_valid" path="../stdlib/validate.imp";
 #call core::import alias="std_calc" path="../stdlib/calc.imp";
+#call core::import alias="std_sort" path="../stdlib/sort.imp";
+#call core::import alias="std_output" path="../stdlib/output.imp";
 ```
 
 Use `stdlib/prelude.imp` only when you need flat compatibility.
@@ -28,6 +30,8 @@ Use `stdlib/prelude.imp` only when you need flat compatibility.
 - `result.imp`: `ok/err/from_nullable/is_ok/is_err/unwrap_or/unwrap`.
 - `validate.imp`: key, numeric range, positivity, and non-empty text requirements.
 - `calc.imp`: business calculations (percent, discount, tax, subtotal, weighted score, safe ratio).
+- `sort.imp`: bubble sort helper for numeric-indexed maps.
+- `output.imp`: parameterized output composition for mixed-type parts, keyed values, and key/value pairs.
 - `object.imp`: legacy object constructors.
 - `io.imp`: print wrapper.
 
@@ -44,6 +48,8 @@ Use `stdlib/prelude.imp` only when you need flat compatibility.
 - `examples/complex_billing_pipeline.imp`
 - `examples/complex_profile_validation.imp`
 - `examples/complex_retry_flow.imp`
+- `examples/bubble_sort_demo.imp`
+- `examples/output_collections_demo.imp`
 
 Legacy/simple examples still available:
 - `examples/stdlib_namespaced_demo.imp`

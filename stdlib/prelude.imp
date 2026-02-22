@@ -8,6 +8,8 @@
 #call core::import alias="res" path="./result.imp";
 #call core::import alias="valid" path="./validate.imp";
 #call core::import alias="calc" path="./calc.imp";
+#call core::import alias="sort" path="./sort.imp";
+#call core::import alias="output" path="./output.imp";
 
 #call core::mod::export name="not" value=bool::not;
 #call core::mod::export name="and" value=bool::and;
@@ -92,6 +94,12 @@
 #call core::mod::export name="taxed_total" value=calc::taxed_total;
 #call core::mod::export name="ratio_or" value=calc::ratio_or;
 #call core::mod::export name="weighted_score" value=calc::weighted_score;
+
+#call core::mod::export name="sort_bubble_asc" value=sort::bubble_asc;
+
+#call core::mod::export name="output_join_parts" value=output::join_parts;
+#call core::mod::export name="output_join_values" value=output::join_values;
+#call core::mod::export name="output_join_pairs" value=output::join_pairs;
 
 #call core::mod::export name="print" value=io::print;
 #call core::exit;

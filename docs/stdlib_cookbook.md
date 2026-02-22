@@ -54,3 +54,19 @@
 - `examples/complex_billing_pipeline.imp`
 - `examples/complex_profile_validation.imp`
 - `examples/complex_retry_flow.imp`
+- `examples/bubble_sort_demo.imp`
+- `examples/output_collections_demo.imp`
+
+## 9) Bubble sort on numeric-index map
+
+```imp
+#call std_sort::bubble_asc args="local::arr,local::n" out=local::arr;
+```
+
+## 10) Parameterized output over mixed collections
+
+```imp
+#call std_output::join_parts args="local::parts,local::n,local::sep,local::prefix,local::suffix" out=local::txt_a;
+#call std_output::join_values args="local::obj,local::keys,local::n,local::sep,local::prefix,local::suffix" out=local::txt_b;
+#call std_output::join_pairs args="local::obj,local::keys,local::n,local::kv_sep,local::part_sep,local::prefix,local::suffix" out=local::txt_c;
+```

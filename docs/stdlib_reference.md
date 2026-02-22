@@ -91,6 +91,16 @@ Functions:
 - `ratio_or(part, total, fallback)`
 - `weighted_score(base, bonus, multiplier)`
 
+## sort.imp
+
+- `bubble_asc(obj, n)` sorts keys `0..n-1` ascending (in-place object update)
+
+## output.imp
+
+- `join_parts(parts, n, sep, prefix, suffix)` for numeric-indexed mixed-type collections
+- `join_values(obj, keys, n, sep, prefix, suffix)` for selected keyed values
+- `join_pairs(obj, keys, n, kv_sep, part_sep, prefix, suffix)` for selected `key<kv_sep>value` segments
+
 ## Legacy/utility modules
 
 - `io.imp`: `print(value) -> value`

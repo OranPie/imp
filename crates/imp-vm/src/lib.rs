@@ -1742,5 +1742,15 @@ mod tests {
             run_example("complex_retry_flow.imp"),
             vec![Value::Str(Arc::from("attempts_used=3"))]
         );
+        assert_eq!(
+            run_example("bubble_sort_demo.imp"),
+            vec![Value::Str(Arc::from("1,2,4,5,8"))]
+        );
+        assert_eq!(
+            run_example("output_collections_demo.imp"),
+            vec![Value::Str(Arc::from(
+                "parts=[id | 42 | true | null] values=Ada,33,en-US pairs={name=Ada; age=33; locale=en-US}",
+            ))]
+        );
     }
 }

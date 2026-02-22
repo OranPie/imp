@@ -1,0 +1,60 @@
+#call core::import alias="std_map" path="../stdlib/map.imp";
+#call core::import alias="std_output" path="../stdlib/output.imp";
+#call core::import alias="std_str" path="../stdlib/string.imp";
+
+#call std_map::new out=local::parts;
+#call core::const out=local::i0 value=0;
+#call core::const out=local::i1 value=1;
+#call core::const out=local::i2 value=2;
+#call core::const out=local::i3 value=3;
+#call core::const out=local::n4 value=4;
+#call core::const out=local::p0 value="id";
+#call core::const out=local::p1 value=42;
+#call core::const out=local::p2 value=true;
+#call core::const out=local::p3 value=null;
+#call std_map::set args="local::parts,local::i0,local::p0" out=local::parts;
+#call std_map::set args="local::parts,local::i1,local::p1" out=local::parts;
+#call std_map::set args="local::parts,local::i2,local::p2" out=local::parts;
+#call std_map::set args="local::parts,local::i3,local::p3" out=local::parts;
+
+#call core::const out=local::parts_sep value=" | ";
+#call core::const out=local::parts_prefix value="[";
+#call core::const out=local::parts_suffix value="]";
+#call std_output::join_parts args="local::parts,local::n4,local::parts_sep,local::parts_prefix,local::parts_suffix" out=local::parts_out;
+
+#call std_map::new out=local::profile;
+#call core::const out=local::k_name value="name";
+#call core::const out=local::k_age value="age";
+#call core::const out=local::k_locale value="locale";
+#call core::const out=local::name value="Ada";
+#call core::const out=local::age value=33;
+#call core::const out=local::locale value="en-US";
+#call std_map::set args="local::profile,local::k_name,local::name" out=local::profile;
+#call std_map::set args="local::profile,local::k_age,local::age" out=local::profile;
+#call std_map::set args="local::profile,local::k_locale,local::locale" out=local::profile;
+
+#call std_map::new out=local::keys;
+#call std_map::set args="local::keys,local::i0,local::k_name" out=local::keys;
+#call std_map::set args="local::keys,local::i1,local::k_age" out=local::keys;
+#call std_map::set args="local::keys,local::i2,local::k_locale" out=local::keys;
+#call core::const out=local::n3 value=3;
+
+#call core::const out=local::comma value=",";
+#call core::const out=local::empty value="";
+#call std_output::join_values args="local::profile,local::keys,local::n3,local::comma,local::empty,local::empty" out=local::values_out;
+
+#call core::const out=local::eq value="=";
+#call core::const out=local::pair_sep value="; ";
+#call core::const out=local::left_brace value="{";
+#call core::const out=local::right_brace value="}";
+#call std_output::join_pairs args="local::profile,local::keys,local::n3,local::eq,local::pair_sep,local::left_brace,local::right_brace" out=local::pairs_out;
+
+#call core::const out=local::label_parts value="parts=";
+#call core::const out=local::label_values value=" values=";
+#call core::const out=local::label_pairs value=" pairs=";
+#call std_str::concat args="local::label_parts,local::parts_out" out=local::line0;
+#call std_str::concat args="local::line0,local::label_values" out=local::line1;
+#call std_str::concat args="local::line1,local::values_out" out=local::line2;
+#call std_str::concat args="local::line2,local::label_pairs" out=local::line3;
+#call std_str::concat args="local::line3,local::pairs_out" out=return::value;
+#call core::exit;
