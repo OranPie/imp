@@ -1,0 +1,37 @@
+#call core::import alias="std_map" path="../stdlib/map.imp";
+#call core::import alias="std_calc" path="../stdlib/calc.imp";
+#call core::import alias="std_valid" path="../stdlib/validate.imp";
+#call core::import alias="std_str" path="../stdlib/string.imp";
+#call core::import alias="std_res" path="../stdlib/result.imp";
+
+#call core::const out=local::qty value=5;
+#call core::const out=local::unit_price value=80;
+#call core::const out=local::discount_pct value=12.5;
+#call core::const out=local::tax_pct value=7;
+
+#call core::const out=local::msg_qty value="qty must be positive";
+#call std_valid::require_positive args="local::qty,local::msg_qty" out=local::qty_checked;
+
+#call core::const out=local::zero value=0;
+#call core::const out=local::hundred value=100;
+#call core::const out=local::msg_discount value="discount out of range";
+#call std_valid::require_between args="local::discount_pct,local::zero,local::hundred,local::msg_discount" out=local::discount_checked;
+
+#call std_calc::taxed_total args="local::qty_checked,local::unit_price,local::discount_checked,local::tax_pct" out=local::total;
+
+#call std_map::new out=local::invoice;
+#call core::const out=local::k_id value="id";
+#call core::const out=local::k_total value="total";
+#call core::const out=local::invoice_id value="INV-2026-0001";
+#call std_map::set args="local::invoice,local::k_id,local::invoice_id" out=local::invoice;
+#call std_map::set args="local::invoice,local::k_total,local::total" out=local::invoice;
+
+#call std_map::get args="local::invoice,local::k_total" out=local::invoice_total;
+#call std_str::to_text args="local::invoice_total" out=local::total_text;
+#call core::const out=local::prefix value="invoice_total: ";
+#call std_str::concat args="local::prefix,local::total_text" out=local::line;
+
+#call std_res::ok args="local::line" out=local::res;
+#call core::const out=local::fallback value="invoice failed";
+#call std_res::unwrap_or args="local::res,local::fallback" out=return::value;
+#call core::exit;

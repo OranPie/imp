@@ -1,62 +1,56 @@
 # Stdlib Cookbook
 
-Small ready-to-copy patterns for everyday coding.
-
-## 1) Pick fallback when missing
+## 1) Dynamic map set/get with fallback
 
 ```imp
-#call std_map::get_or args="local::settings,local::k_theme,local::default_theme" out=local::theme;
+#call std_map::set args="local::cfg,local::k_timeout,local::timeout" out=local::cfg;
+#call std_map::get_or args="local::cfg,local::k_timeout,local::fallback" out=local::timeout;
 ```
 
-## 2) Guard input and crash early
+## 2) Validate then calculate
 
 ```imp
-#call std_ctrl::require_not_null args="local::user_id,local::msg" out=local::uid;
+#call std_valid::require_positive args="local::qty,local::msg" out=local::qty_checked;
+#call std_calc::taxed_total args="local::qty_checked,local::unit,local::disc,local::tax" out=local::total;
 ```
 
-## 3) Branch without writing labels
+## 3) Safe ratio without crashing
 
 ```imp
-#call std_ctrl::if_else args="local::is_admin,local::admin_value,local::user_value" out=local::role_value;
+#call std_calc::ratio_or args="local::part,local::total,local::fallback" out=local::ratio;
 ```
 
-## 4) Build display message
+## 4) Result from nullable
 
 ```imp
-#call std_str::concat args="local::prefix,local::name" out=local::line;
+#call std_res::from_nullable args="local::maybe_user,local::err" out=local::res;
+#call std_res::unwrap_or args="local::res,local::anon" out=local::user;
 ```
 
-## 5) Clamp numeric input
+## 5) Rich text assembly
 
 ```imp
-#call std_math::clamp args="local::score,local::min_score,local::max_score" out=local::safe_score;
+#call std_str::to_text args="local::score" out=local::score_txt;
+#call std_str::join_colon args="local::label,local::score_txt" out=local::line;
 ```
 
-## 6) Result-style return
+## 6) Branch expression style
 
 ```imp
-#call std_res::ok args="local::payload" out=return::value;
+#call std_ctrl::if_else args="local::is_admin,local::admin_path,local::user_path" out=local::path;
+```
+
+## 7) Full pipeline sketch
+
+```imp
+#call std_map::require args="local::req,local::k_user,local::msg_missing" out=local::user;
+#call std_valid::require_non_empty_text args="local::user,local::msg_empty" out=local::user;
+#call std_res::ok args="local::user" out=return::value;
 #call core::exit;
 ```
 
-## 7) Fallback for failed result
+## 8) Complex runnable examples
 
-```imp
-#call std_res::unwrap_or args="local::result,local::fallback" out=local::value;
-```
-
-## 8) Compose namespaced imports
-
-```imp
-#call core::import alias="std_math" path="../stdlib/math.imp";
-#call core::import alias="std_map" path="../stdlib/map.imp";
-#call core::import alias="std_res" path="../stdlib/result.imp";
-```
-
-## 9) Keep old scripts running
-
-```imp
-#call core::import alias="std" path="../stdlib/prelude.imp";
-```
-
-Use this only for compatibility; prefer namespaced modules in new files.
+- `examples/complex_billing_pipeline.imp`
+- `examples/complex_profile_validation.imp`
+- `examples/complex_retry_flow.imp`

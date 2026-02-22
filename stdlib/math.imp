@@ -36,10 +36,24 @@
 #call core::exit;
 #call core::fn::end;
 
+#call core::fn::begin name=main::sum4 args="a,b,c,d" retshape="scalar";
+#call core::add a=arg::a b=arg::b out=local::ab;
+#call core::add a=arg::c b=arg::d out=local::cd;
+#call core::add a=local::ab b=local::cd out=return::value;
+#call core::exit;
+#call core::fn::end;
+
 #call core::fn::begin name=main::avg2 args="a,b" retshape="scalar";
 #call core::const out=local::two value=2;
 #call core::add a=arg::a b=arg::b out=local::sum;
 #call core::div a=local::sum b=local::two out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::avg3 args="a,b,c" retshape="scalar";
+#call core::const out=local::three value=3;
+#call main::sum3 args="arg::a,arg::b,arg::c" out=local::sum;
+#call core::div a=local::sum b=local::three out=return::value;
 #call core::exit;
 #call core::fn::end;
 
@@ -149,7 +163,9 @@
 #call core::mod::export name="inc" value=main::inc;
 #call core::mod::export name="dec" value=main::dec;
 #call core::mod::export name="sum3" value=main::sum3;
+#call core::mod::export name="sum4" value=main::sum4;
 #call core::mod::export name="avg2" value=main::avg2;
+#call core::mod::export name="avg3" value=main::avg3;
 #call core::mod::export name="abs" value=main::abs;
 #call core::mod::export name="sign" value=main::sign;
 #call core::mod::export name="is_positive" value=main::is_positive;

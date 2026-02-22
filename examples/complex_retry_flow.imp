@@ -1,0 +1,48 @@
+#call core::import alias="std_res" path="../stdlib/result.imp";
+#call core::import alias="std_str" path="../stdlib/string.imp";
+
+#call core::const out=local::i value=0;
+#call core::const out=local::one value=1;
+#call core::const out=local::limit value=4;
+#call core::const out=local::trigger value=2;
+#call core::const out=local::true value=true;
+#call core::const out=local::false value=false;
+#call core::const out=local::err_msg value="failed";
+#call core::mov from=local::false to=local::success;
+
+#call core::label name="loop";
+#call core::lt a=local::i b=local::limit out=local::can_continue;
+#call core::br cond=local::can_continue then="check_success" else="done";
+
+#call core::label name="check_success";
+#call core::br cond=local::success then="done" else="body";
+
+#call core::label name="body";
+#call core::eq a=local::i b=local::trigger out=local::hit;
+#call core::br cond=local::hit then="set_success" else="inc_only";
+
+#call core::label name="set_success";
+#call core::mov from=local::true to=local::success;
+#call core::jump target="inc_only";
+
+#call core::label name="inc_only";
+#call core::add a=local::i b=local::one out=local::i;
+#call core::jump target="loop";
+
+#call core::label name="done";
+#call core::br cond=local::success then="ret_ok" else="ret_err";
+
+#call core::label name="ret_ok";
+#call std_res::ok args="local::i" out=local::res;
+#call core::jump target="final";
+
+#call core::label name="ret_err";
+#call std_res::err args="local::err_msg" out=local::res;
+
+#call core::label name="final";
+#call core::const out=local::fallback value=-1;
+#call std_res::unwrap_or args="local::res,local::fallback" out=local::used;
+#call std_str::to_text args="local::used" out=local::used_text;
+#call core::const out=local::prefix value="attempts_used=";
+#call std_str::concat args="local::prefix,local::used_text" out=return::value;
+#call core::exit;

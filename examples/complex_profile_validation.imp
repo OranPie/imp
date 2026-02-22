@@ -1,0 +1,37 @@
+#call core::import alias="std_map" path="../stdlib/map.imp";
+#call core::import alias="std_valid" path="../stdlib/validate.imp";
+#call core::import alias="std_str" path="../stdlib/string.imp";
+#call core::import alias="std_res" path="../stdlib/result.imp";
+
+#call std_map::new out=local::profile;
+#call core::const out=local::k_name value="name";
+#call core::const out=local::k_age value="age";
+#call core::const out=local::k_locale value="locale";
+#call core::const out=local::name value="Ada";
+#call core::const out=local::age value=33;
+#call core::const out=local::default_locale value="en-US";
+
+#call std_map::set args="local::profile,local::k_name,local::name" out=local::profile;
+#call std_map::set args="local::profile,local::k_age,local::age" out=local::profile;
+#call std_map::upsert_default args="local::profile,local::k_locale,local::default_locale" out=local::profile;
+
+#call core::const out=local::msg_name_key value="profile.name missing";
+#call core::const out=local::msg_age_key value="profile.age missing";
+#call core::const out=local::msg_name_empty value="name empty";
+#call core::const out=local::msg_age_positive value="age must be positive";
+
+#call std_valid::require_key args="local::profile,local::k_name,local::msg_name_key" out=local::name_val;
+#call std_valid::require_key args="local::profile,local::k_age,local::msg_age_key" out=local::age_val;
+#call std_valid::require_non_empty_text args="local::name_val,local::msg_name_empty" out=local::name_checked;
+#call std_valid::require_positive args="local::age_val,local::msg_age_positive" out=local::age_checked;
+
+#call std_map::get args="local::profile,local::k_locale" out=local::locale;
+#call core::const out=local::left value="(";
+#call core::const out=local::right value=")";
+#call std_str::surround args="local::left,local::locale,local::right" out=local::loc_part;
+#call std_str::join_space args="local::name_checked,local::loc_part" out=local::summary;
+
+#call std_res::ok args="local::summary" out=local::res;
+#call core::const out=local::unwrap_prefix value="profile error: ";
+#call std_res::unwrap args="local::res,local::unwrap_prefix" out=return::value;
+#call core::exit;

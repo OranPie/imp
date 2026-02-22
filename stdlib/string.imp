@@ -1,3 +1,9 @@
+#call core::fn::begin name=main::to_text args="value" retshape="scalar";
+#call core::const out=local::empty value="";
+#call core::str::concat a=local::empty b=arg::value out=return::value;
+#call core::exit;
+#call core::fn::end;
+
 #call core::fn::begin name=main::concat args="a,b" retshape="scalar";
 #call core::str::concat a=arg::a b=arg::b out=return::value;
 #call core::exit;
@@ -6,6 +12,17 @@
 #call core::fn::begin name=main::concat3 args="a,b,c" retshape="scalar";
 #call core::str::concat a=arg::a b=arg::b out=local::ab;
 #call core::str::concat a=local::ab b=arg::c out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::repeat2 args="value" retshape="scalar";
+#call core::str::concat a=arg::value b=arg::value out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::repeat3 args="value" retshape="scalar";
+#call main::repeat2 args="arg::value" out=local::two;
+#call core::str::concat a=local::two b=arg::value out=return::value;
 #call core::exit;
 #call core::fn::end;
 
@@ -26,9 +43,35 @@
 #call core::exit;
 #call core::fn::end;
 
+#call core::fn::begin name=main::surround args="left,value,right" retshape="scalar";
+#call core::str::concat a=arg::left b=arg::value out=local::lv;
+#call core::str::concat a=local::lv b=arg::right out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::join_space args="a,b" retshape="scalar";
+#call core::const out=local::space value=" ";
+#call core::str::concat a=arg::a b=local::space out=local::tmp;
+#call core::str::concat a=local::tmp b=arg::b out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::join_colon args="a,b" retshape="scalar";
+#call core::const out=local::colon value=": ";
+#call core::str::concat a=arg::a b=local::colon out=local::tmp;
+#call core::str::concat a=local::tmp b=arg::b out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="to_text" value=main::to_text;
 #call core::mod::export name="concat" value=main::concat;
 #call core::mod::export name="concat3" value=main::concat3;
+#call core::mod::export name="repeat2" value=main::repeat2;
+#call core::mod::export name="repeat3" value=main::repeat3;
 #call core::mod::export name="len" value=main::len;
 #call core::mod::export name="is_empty" value=main::is_empty;
 #call core::mod::export name="prefix" value=main::prefix;
+#call core::mod::export name="surround" value=main::surround;
+#call core::mod::export name="join_space" value=main::join_space;
+#call core::mod::export name="join_colon" value=main::join_colon;
 #call core::exit;

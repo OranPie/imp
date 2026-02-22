@@ -6,11 +6,17 @@
 #call core::import alias="map" path="./map.imp";
 #call core::import alias="str" path="./string.imp";
 #call core::import alias="res" path="./result.imp";
+#call core::import alias="valid" path="./validate.imp";
+#call core::import alias="calc" path="./calc.imp";
 
 #call core::mod::export name="not" value=bool::not;
 #call core::mod::export name="and" value=bool::and;
 #call core::mod::export name="or" value=bool::or;
 #call core::mod::export name="xor" value=bool::xor;
+#call core::mod::export name="eq" value=bool::eq;
+#call core::mod::export name="neq" value=bool::neq;
+#call core::mod::export name="all3" value=bool::all3;
+#call core::mod::export name="any3" value=bool::any3;
 #call core::mod::export name="select" value=bool::select;
 #call core::mod::export name="is_null" value=bool::is_null;
 #call core::mod::export name="is_not_null" value=bool::is_not_null;
@@ -22,7 +28,9 @@
 #call core::mod::export name="inc" value=math::inc;
 #call core::mod::export name="dec" value=math::dec;
 #call core::mod::export name="sum3" value=math::sum3;
+#call core::mod::export name="sum4" value=math::sum4;
 #call core::mod::export name="avg2" value=math::avg2;
+#call core::mod::export name="avg3" value=math::avg3;
 #call core::mod::export name="abs" value=math::abs;
 #call core::mod::export name="sign" value=math::sign;
 #call core::mod::export name="is_positive" value=math::is_positive;
@@ -39,28 +47,51 @@
 
 #call core::mod::export name="if_else" value=ctrl::if_else;
 #call core::mod::export name="coalesce" value=ctrl::coalesce;
+#call core::mod::export name="guard_or" value=ctrl::guard_or;
 #call core::mod::export name="require_not_null" value=ctrl::require_not_null;
 #call core::mod::export name="assert_true" value=ctrl::assert_true;
 #call core::mod::export name="assert_eq" value=ctrl::assert_eq;
 
 #call core::mod::export name="map_new" value=map::new;
+#call core::mod::export name="map_set" value=map::set;
 #call core::mod::export name="map_get" value=map::get;
 #call core::mod::export name="map_has" value=map::has;
 #call core::mod::export name="map_get_or" value=map::get_or;
 #call core::mod::export name="map_require" value=map::require;
+#call core::mod::export name="map_upsert_default" value=map::upsert_default;
 
+#call core::mod::export name="str_to_text" value=str::to_text;
 #call core::mod::export name="str_concat" value=str::concat;
 #call core::mod::export name="str_concat3" value=str::concat3;
+#call core::mod::export name="str_repeat2" value=str::repeat2;
+#call core::mod::export name="str_repeat3" value=str::repeat3;
 #call core::mod::export name="str_len" value=str::len;
 #call core::mod::export name="str_is_empty" value=str::is_empty;
 #call core::mod::export name="str_prefix" value=str::prefix;
+#call core::mod::export name="str_surround" value=str::surround;
+#call core::mod::export name="str_join_space" value=str::join_space;
+#call core::mod::export name="str_join_colon" value=str::join_colon;
 
 #call core::mod::export name="ok" value=res::ok;
 #call core::mod::export name="err" value=res::err;
+#call core::mod::export name="from_nullable" value=res::from_nullable;
 #call core::mod::export name="is_ok" value=res::is_ok;
 #call core::mod::export name="is_err" value=res::is_err;
 #call core::mod::export name="unwrap_or" value=res::unwrap_or;
-#call core::mod::export name="expect" value=res::expect;
+#call core::mod::export name="unwrap" value=res::unwrap;
+
+#call core::mod::export name="require_between" value=valid::require_between;
+#call core::mod::export name="require_positive" value=valid::require_positive;
+#call core::mod::export name="require_non_empty_text" value=valid::require_non_empty_text;
+#call core::mod::export name="require_key" value=valid::require_key;
+
+#call core::mod::export name="percent_of" value=calc::percent_of;
+#call core::mod::export name="discount_amount" value=calc::discount_amount;
+#call core::mod::export name="tax_amount" value=calc::tax_amount;
+#call core::mod::export name="subtotal" value=calc::subtotal;
+#call core::mod::export name="taxed_total" value=calc::taxed_total;
+#call core::mod::export name="ratio_or" value=calc::ratio_or;
+#call core::mod::export name="weighted_score" value=calc::weighted_score;
 
 #call core::mod::export name="print" value=io::print;
 #call core::exit;

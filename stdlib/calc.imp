@@ -1,0 +1,60 @@
+#call core::import alias="std_math" path="./math.imp";
+
+#call core::fn::begin name=main::percent_of args="value,pct" retshape="scalar";
+#call core::const out=local::hundred value=100;
+#call core::mul a=arg::value b=arg::pct out=local::scaled;
+#call core::div a=local::scaled b=local::hundred out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::discount_amount args="subtotal,discount_pct" retshape="scalar";
+#call main::percent_of args="arg::subtotal,arg::discount_pct" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::tax_amount args="base,tax_pct" retshape="scalar";
+#call main::percent_of args="arg::base,arg::tax_pct" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::subtotal args="qty,unit_price" retshape="scalar";
+#call core::mul a=arg::qty b=arg::unit_price out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::taxed_total args="qty,unit_price,discount_pct,tax_pct" retshape="scalar";
+#call main::subtotal args="arg::qty,arg::unit_price" out=local::sub;
+#call main::discount_amount args="local::sub,arg::discount_pct" out=local::discount;
+#call core::sub a=local::sub b=local::discount out=local::after_discount;
+#call main::tax_amount args="local::after_discount,arg::tax_pct" out=local::tax;
+#call core::add a=local::after_discount b=local::tax out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::ratio_or args="part,total,fallback" retshape="scalar";
+#call @safe core::div a=arg::part b=arg::total out=local::ratio;
+#call core::const out=local::null value=null;
+#call core::eq a=local::ratio b=local::null out=local::is_null;
+#call core::br cond=local::is_null then="ret_fallback" else="ret_ratio";
+#call core::label name="ret_fallback";
+#call core::mov from=arg::fallback to=return::value;
+#call core::exit;
+#call core::label name="ret_ratio";
+#call core::mov from=local::ratio to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::weighted_score args="base,bonus,multiplier" retshape="scalar";
+#call core::add a=arg::base b=arg::bonus out=local::sum;
+#call core::mul a=local::sum b=arg::multiplier out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="percent_of" value=main::percent_of;
+#call core::mod::export name="discount_amount" value=main::discount_amount;
+#call core::mod::export name="tax_amount" value=main::tax_amount;
+#call core::mod::export name="subtotal" value=main::subtotal;
+#call core::mod::export name="taxed_total" value=main::taxed_total;
+#call core::mod::export name="ratio_or" value=main::ratio_or;
+#call core::mod::export name="weighted_score" value=main::weighted_score;
+#call core::exit;

@@ -1,0 +1,54 @@
+#call core::import alias="std_math" path="./math.imp";
+#call core::import alias="std_str" path="./string.imp";
+
+#call core::fn::begin name=main::require_between args="value,low,high,msg" retshape="scalar";
+#call std_math::between args="arg::value,arg::low,arg::high" out=local::ok;
+#call core::br cond=local::ok then="ret_value" else="throw";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="out_of_range" msg="value out of range";
+#call core::label name="ret_value";
+#call core::mov from=arg::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::require_positive args="value,msg" retshape="scalar";
+#call std_math::is_positive args="arg::value" out=local::ok;
+#call core::br cond=local::ok then="ret_value" else="throw";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="not_positive" msg="value must be positive";
+#call core::label name="ret_value";
+#call core::mov from=arg::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::require_non_empty_text args="value,msg" retshape="scalar";
+#call std_str::len args="arg::value" out=local::len;
+#call core::const out=local::zero value=0;
+#call core::eq a=local::len b=local::zero out=local::is_empty;
+#call core::br cond=local::is_empty then="throw" else="ret_value";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="empty_text" msg="text cannot be empty";
+#call core::label name="ret_value";
+#call core::mov from=arg::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::require_key args="obj,key,msg" retshape="scalar";
+#call core::obj::has obj=arg::obj key=arg::key out=local::has;
+#call core::br cond=local::has then="ret_value" else="throw";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="missing_key" msg="required key missing";
+#call core::label name="ret_value";
+#call core::obj::get obj=arg::obj key=arg::key out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="require_between" value=main::require_between;
+#call core::mod::export name="require_positive" value=main::require_positive;
+#call core::mod::export name="require_non_empty_text" value=main::require_non_empty_text;
+#call core::mod::export name="require_key" value=main::require_key;
+#call core::exit;

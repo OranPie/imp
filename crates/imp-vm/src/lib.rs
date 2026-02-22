@@ -264,7 +264,7 @@ impl JitStep {
                 exec: step_obj_set,
                 operands: JitOperands::ObjSet {
                     obj: *obj,
-                    key: Arc::from(key.as_str()),
+                    key: *key,
                     value: *value,
                     out: *out,
                 },
@@ -368,7 +368,7 @@ enum JitOperands {
     },
     ObjSet {
         obj: Slot,
-        key: Arc<str>,
+        key: Slot,
         value: Slot,
         out: Slot,
     },
@@ -727,7 +727,8 @@ impl Vm {
                             ));
                         }
                     };
-                    object.insert(key, frame.get(value, globals)?);
+                    let key_text = value_to_text(&frame.get(key, globals)?)?;
+                    object.insert(key_text, frame.get(value, globals)?);
                     frame.set(out, Value::Obj(object), globals);
                     frame.pc += 1;
                 }
@@ -1076,7 +1077,8 @@ fn step_obj_set(
             ));
         }
     };
-    object.insert(key.to_string(), frame.get(*value, globals)?);
+    let key_text = value_to_text(&frame.get(*key, globals)?)?;
+    object.insert(key_text, frame.get(*value, globals)?);
     frame.set(*out, Value::Obj(object), globals);
     Ok(StepControl::Next(pc + 1))
 }
@@ -1351,6 +1353,7 @@ mod tests {
     use imp_compiler::{FsModuleLoader, compile_module};
     use imp_ir::{CompiledFunction, CompiledModule, ConstValue, FnMeta, Instr, RetShape, Slot};
     use std::fs;
+    use std::path::PathBuf;
 
     fn scalar_meta(name: &str) -> FnMeta {
         FnMeta {
@@ -1568,42 +1571,46 @@ mod tests {
                     slot: Slot::Local(1),
                     value: ConstValue::Str(Arc::from("neo")),
                 },
-                Instr::ObjSet {
-                    obj: Slot::Local(0),
-                    key: "name".to_owned(),
-                    value: Slot::Local(1),
-                    out: Slot::Local(0),
-                },
                 Instr::StoreConst {
                     slot: Slot::Local(2),
                     value: ConstValue::Str(Arc::from("name")),
                 },
-                Instr::ObjHas {
+                Instr::ObjSet {
                     obj: Slot::Local(0),
                     key: Slot::Local(2),
+                    value: Slot::Local(1),
+                    out: Slot::Local(0),
+                },
+                Instr::StoreConst {
+                    slot: Slot::Local(5),
+                    value: ConstValue::Str(Arc::from("name")),
+                },
+                Instr::ObjHas {
+                    obj: Slot::Local(0),
+                    key: Slot::Local(5),
                     out: Slot::Local(3),
                 },
                 Instr::ObjGet {
                     obj: Slot::Local(0),
-                    key: Slot::Local(2),
+                    key: Slot::Local(5),
                     out: Slot::Local(4),
                 },
                 Instr::StoreConst {
-                    slot: Slot::Local(5),
+                    slot: Slot::Local(6),
                     value: ConstValue::Str(Arc::from("!")),
                 },
                 Instr::StrConcat {
                     a: Slot::Local(4),
-                    b: Slot::Local(5),
-                    out: Slot::Local(6),
+                    b: Slot::Local(6),
+                    out: Slot::Local(7),
                 },
                 Instr::StrLen {
-                    value: Slot::Local(6),
+                    value: Slot::Local(7),
                     out: Slot::Ret(0),
                 },
                 Instr::Exit,
             ]),
-            local_count: 7,
+            local_count: 8,
             arg_count: 0,
             ret_count: 1,
             err_count: 1,
@@ -1705,5 +1712,35 @@ mod tests {
         });
         let result = vm.run_main(&module).expect("run");
         assert_eq!(result.returns, vec![Value::Str(Arc::from("imp!"))]);
+    }
+
+    fn run_example(name: &str) -> Vec<Value> {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../examples")
+            .join(name)
+            .canonicalize()
+            .expect("canonicalize example path");
+        let module = compile_module(&path, &FsModuleLoader).expect("compile example");
+        let mut vm = Vm::new(VmConfig {
+            enable_host_print: false,
+            enable_jit: true,
+        });
+        vm.run_main(&module).expect("run example").returns
+    }
+
+    #[test]
+    fn complex_examples_run() {
+        assert_eq!(
+            run_example("complex_billing_pipeline.imp"),
+            vec![Value::Str(Arc::from("invoice_total: 374.5"))]
+        );
+        assert_eq!(
+            run_example("complex_profile_validation.imp"),
+            vec![Value::Str(Arc::from("Ada (en-US)"))]
+        );
+        assert_eq!(
+            run_example("complex_retry_flow.imp"),
+            vec![Value::Str(Arc::from("attempts_used=3"))]
+        );
     }
 }

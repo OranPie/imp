@@ -2,26 +2,27 @@
 
 Imp-Core v2.0 reference implementation in Rust.
 
-## What is included
+## Features
 
-- Parser, compiler, IR, VM, JIT execution path
-- Import/module system
-- Expanded stdlib as `.imp` source modules
-- CLI runner and IR dump command
+- Parse/compile/VM execution pipeline
+- Runtime JIT path with interpreter fallback
+- Module import/export system
+- Expanded stdlib written in `.imp`
+- Complex example programs
 
-## Run
+## Quick run
 
 ```bash
-cargo run -p imp-cli -- run examples/stdlib_namespaced_demo.imp
+cargo run -p imp-cli -- run examples/complex_billing_pipeline.imp
 ```
 
-## Test
+## Tests
 
 ```bash
 cargo test
 ```
 
-## Bench
+## Benchmarks
 
 ```bash
 cargo bench -p imp-vm --bench vm_bench
@@ -29,8 +30,8 @@ cargo bench -p imp-vm --bench vm_bench
 
 ## Docs
 
-- `docs/spec-v2.md` - language/runtime specification
-- `docs/stdlib.md` - stdlib guide and usage
-- `docs/stdlib_reference.md` - full API list
-- `docs/stdlib_cookbook.md` - practical patterns
-- `docs/benchmarks.md` - benchmark commands
+- `docs/spec-v2.md`
+- `docs/stdlib.md`
+- `docs/stdlib_reference.md`
+- `docs/stdlib_cookbook.md`
+- `docs/benchmarks.md`

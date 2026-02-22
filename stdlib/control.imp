@@ -20,6 +20,16 @@
 #call core::exit;
 #call core::fn::end;
 
+#call core::fn::begin name=main::guard_or args="cond,value,msg" retshape="scalar";
+#call core::br cond=arg::cond then="ret_value" else="throw";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="guard_or" msg="guard_or failed";
+#call core::label name="ret_value";
+#call core::mov from=arg::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
 #call core::fn::begin name=main::require_not_null args="value,msg" retshape="scalar";
 #call core::const out=local::null value=null;
 #call core::eq a=arg::value b=local::null out=local::is_null;
@@ -57,6 +67,7 @@
 
 #call core::mod::export name="if_else" value=main::if_else;
 #call core::mod::export name="coalesce" value=main::coalesce;
+#call core::mod::export name="guard_or" value=main::guard_or;
 #call core::mod::export name="require_not_null" value=main::require_not_null;
 #call core::mod::export name="assert_true" value=main::assert_true;
 #call core::mod::export name="assert_eq" value=main::assert_eq;

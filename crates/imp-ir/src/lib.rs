@@ -96,7 +96,7 @@ pub enum Instr {
     },
     ObjSet {
         obj: Slot,
-        key: String,
+        key: Slot,
         value: Slot,
         out: Slot,
     },

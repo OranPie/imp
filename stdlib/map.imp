@@ -3,6 +3,11 @@
 #call core::exit;
 #call core::fn::end;
 
+#call core::fn::begin name=main::set args="obj,key,value" retshape="scalar";
+#call core::obj::set obj=arg::obj key=arg::key value=arg::value out=return::value;
+#call core::exit;
+#call core::fn::end;
+
 #call core::fn::begin name=main::get args="obj,key" retshape="scalar";
 #call core::obj::get obj=arg::obj key=arg::key out=return::value;
 #call core::exit;
@@ -37,9 +42,22 @@
 #call core::exit;
 #call core::fn::end;
 
+#call core::fn::begin name=main::upsert_default args="obj,key,default_value" retshape="scalar";
+#call core::obj::has obj=arg::obj key=arg::key out=local::exists;
+#call core::br cond=local::exists then="ret_obj" else="set_default";
+#call core::label name="set_default";
+#call core::obj::set obj=arg::obj key=arg::key value=arg::default_value out=return::value;
+#call core::exit;
+#call core::label name="ret_obj";
+#call core::mov from=arg::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
 #call core::mod::export name="new" value=main::new;
+#call core::mod::export name="set" value=main::set;
 #call core::mod::export name="get" value=main::get;
 #call core::mod::export name="has" value=main::has;
 #call core::mod::export name="get_or" value=main::get_or;
 #call core::mod::export name="require" value=main::require;
+#call core::mod::export name="upsert_default" value=main::upsert_default;
 #call core::exit;

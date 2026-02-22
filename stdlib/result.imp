@@ -16,6 +16,18 @@
 #call core::exit;
 #call core::fn::end;
 
+#call core::fn::begin name=main::from_nullable args="value,error_message" retshape="scalar";
+#call core::const out=local::null value=null;
+#call core::eq a=arg::value b=local::null out=local::is_null;
+#call core::br cond=local::is_null then="ret_err" else="ret_ok";
+#call core::label name="ret_err";
+#call main::err args="arg::error_message" out=return::value;
+#call core::exit;
+#call core::label name="ret_ok";
+#call main::ok args="arg::value" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
 #call core::fn::begin name=main::is_ok args="result" retshape="scalar";
 #call core::const out=local::k_ok value="ok";
 #call core::obj::get obj=arg::result key=local::k_ok out=return::value;
@@ -49,7 +61,7 @@
 #call core::exit;
 #call core::fn::end;
 
-#call core::fn::begin name=main::expect args="result,msg_prefix" retshape="scalar";
+#call core::fn::begin name=main::unwrap args="result,msg_prefix" retshape="scalar";
 #call core::const out=local::k_ok value="ok";
 #call core::const out=local::k_val value="value";
 #call core::const out=local::k_err value="error";
@@ -62,13 +74,14 @@
 #call core::obj::get obj=arg::result key=local::k_err out=local::err_msg;
 #call core::str::concat a=arg::msg_prefix b=local::err_msg out=local::full_msg;
 #call core::host::print value=local::full_msg;
-#call core::throw code="expect_failed" msg="expect failed";
+#call core::throw code="unwrap_failed" msg="unwrap failed";
 #call core::fn::end;
 
 #call core::mod::export name="ok" value=main::ok;
 #call core::mod::export name="err" value=main::err;
+#call core::mod::export name="from_nullable" value=main::from_nullable;
 #call core::mod::export name="is_ok" value=main::is_ok;
 #call core::mod::export name="is_err" value=main::is_err;
 #call core::mod::export name="unwrap_or" value=main::unwrap_or;
-#call core::mod::export name="expect" value=main::expect;
+#call core::mod::export name="unwrap" value=main::unwrap;
 #call core::exit;

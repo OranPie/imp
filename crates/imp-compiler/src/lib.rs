@@ -607,7 +607,14 @@ fn lower_call(
         }
         "core::obj::set" => {
             let obj = resolve_named_ref(call, "obj", env, builder)?;
-            let key = get_string_arg(call, "key")?;
+            let key = resolve_atom_to_slot(
+                call.arg("key")
+                    .ok_or_else(|| CompileError::new(call.line, "core::obj::set missing key"))?,
+                env,
+                builder,
+                code,
+                call.line,
+            )?;
             let value = resolve_named_ref(call, "value", env, builder)?;
             let out = call
                 .arg("out")
