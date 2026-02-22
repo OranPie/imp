@@ -152,6 +152,31 @@ Configurable builders:
 - `with2(k1, v1, k2, v2) -> obj`
 - `with3(k1, v1, k2, v2, k3, v3) -> obj`
 
+## collections.imp
+
+- `new() -> obj` create numeric-index map collection
+- `push(obj, n, value) -> obj` write `value` at index `n`
+- `swap(obj, i, j) -> obj` swap two indexes
+- `at(obj, index, fallback) -> scalar` return fallback on null/missing
+- `clone(obj, n) -> obj` clone range `[0, n)`
+- `reverse(obj, n) -> obj` in-place two-pointer reverse
+- `from2(a, b) -> obj`
+- `from3(a, b, c) -> obj`
+- `from4(a, b, c, d) -> obj`
+
+## iter.imp
+
+- `reduce_sum(obj, n) -> num` fold numeric range `[0, n)` into a sum
+- `any_eq(obj, n, target) -> bool` true if any element equals target
+- `map_mul_scalar(obj, n, factor) -> obj` mapped copy of numeric multiply
+
+## algo.imp
+
+- `find_index(obj, n, target) -> num` first index or `-1`
+- `contains(obj, n, target) -> bool`
+- `min_value(obj, n, fallback) -> scalar`
+- `max_value(obj, n, fallback) -> scalar`
+
 ## output.imp
 
 - `join_parts(parts, n, sep, prefix, suffix)` for numeric-indexed mixed-type collections

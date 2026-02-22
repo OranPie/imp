@@ -17,6 +17,9 @@ Goal: reduce boilerplate for real scripts (validation, map access, text assembly
 #call core::import alias="std_sort" path="../stdlib/sort/mod.imp";
 #call core::import alias="std_enum" path="../stdlib/enum.imp";
 #call core::import alias="std_cobj" path="../stdlib/custom_object.imp";
+#call core::import alias="std_col" path="../stdlib/collections.imp";
+#call core::import alias="std_iter" path="../stdlib/iter.imp";
+#call core::import alias="std_algo" path="../stdlib/algo.imp";
 #call core::import alias="std_output" path="../stdlib/output.imp";
 ```
 
@@ -35,6 +38,9 @@ Use `stdlib/prelude.imp` only when you need flat compatibility.
 - `sort/`: comparator-function-driven sorting helpers (bubble/selection/check) plus range and pass-limit configs.
 - `enum.imp`: tagged-value helpers for variants and enum-style branching.
 - `custom_object.imp`: configurable object builders (`define/patch/pick`) and wrappers.
+- `collections.imp`: indexed-collection helpers (`fromN/push/swap/clone/reverse/at`).
+- `iter.imp`: collection iteration helpers (`reduce_sum/any_eq/map_mul_scalar`).
+- `algo.imp`: search/stat helpers (`find_index/contains/min_value/max_value`).
 - `output.imp`: parameterized output composition for mixed-type parts, keyed values, and key/value pairs.
 - `object.imp`: legacy object constructors.
 - `io.imp`: print wrapper.
@@ -56,6 +62,7 @@ Use `stdlib/prelude.imp` only when you need flat compatibility.
 - `examples/sort_custom_comp_demo.imp`
 - `examples/sort_config_demo.imp`
 - `examples/enum_custom_object_demo.imp`
+- `examples/collections_algo_demo.imp`
 - `examples/output_collections_demo.imp`
 
 Legacy/simple examples still available:

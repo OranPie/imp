@@ -1849,6 +1849,12 @@ mod tests {
             vec![Value::Str(Arc::from("ok=true name=Ada"))]
         );
         assert_eq!(
+            run_example("collections_algo_demo.imp"),
+            vec![Value::Str(Arc::from(
+                "idx=2 has7=false sum=19 rev=[3,5,3,8]",
+            ))]
+        );
+        assert_eq!(
             run_example("output_collections_demo.imp"),
             vec![Value::Str(Arc::from(
                 "parts=[id | 42 | true | null] values=Ada,33,en-US pairs={name=Ada; age=33; locale=en-US}",

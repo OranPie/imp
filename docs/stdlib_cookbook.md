@@ -58,6 +58,7 @@
 - `examples/sort_custom_comp_demo.imp`
 - `examples/sort_config_demo.imp`
 - `examples/enum_custom_object_demo.imp`
+- `examples/collections_algo_demo.imp`
 - `examples/output_collections_demo.imp`
 
 ## 9) Bubble sort on numeric-index map
@@ -98,4 +99,12 @@
 #call std_cobj::define args="local::keys,local::values,local::n" out=local::payload;
 #call std_enum::variant args="local::ok_tag,local::payload" out=local::res;
 #call std_enum::expect_payload args="local::res,local::ok_tag,local::msg" out=local::obj;
+```
+
+## 14) Collection + algorithm helpers
+
+```imp
+#call std_col::from4 args="local::a,local::b,local::c,local::d" out=local::items;
+#call std_algo::find_index args="local::items,local::n,local::target" out=local::idx;
+#call std_iter::reduce_sum args="local::items,local::n" out=local::sum;
 ```

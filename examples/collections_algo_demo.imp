@@ -1,0 +1,44 @@
+#call core::import alias="std_col" path="../stdlib/collections.imp";
+#call core::import alias="std_iter" path="../stdlib/iter.imp";
+#call core::import alias="std_algo" path="../stdlib/algo.imp";
+#call core::import alias="std_output" path="../stdlib/output.imp";
+#call core::import alias="std_str" path="../stdlib/string.imp";
+
+#call core::const out=local::n value=4;
+#call core::const out=local::a value=8;
+#call core::const out=local::b value=3;
+#call core::const out=local::c value=5;
+#call core::const out=local::d value=3;
+#call std_col::from4 args="local::a,local::b,local::c,local::d" out=local::items;
+
+#call core::const out=local::target_five value=5;
+#call core::const out=local::target_seven value=7;
+#call std_algo::find_index args="local::items,local::n,local::target_five" out=local::idx;
+#call std_algo::contains args="local::items,local::n,local::target_seven" out=local::has7;
+#call std_iter::reduce_sum args="local::items,local::n" out=local::sum;
+
+#call std_col::clone args="local::items,local::n" out=local::rev;
+#call std_col::reverse args="local::rev,local::n" out=local::rev;
+
+#call core::const out=local::comma value=",";
+#call core::const out=local::left value="[";
+#call core::const out=local::right value="]";
+#call std_output::join_parts args="local::rev,local::n,local::comma,local::left,local::right" out=local::rev_text;
+
+#call std_str::to_text args="local::idx" out=local::idx_text;
+#call std_str::to_text args="local::has7" out=local::has7_text;
+#call std_str::to_text args="local::sum" out=local::sum_text;
+
+#call core::const out=local::p_idx value="idx=";
+#call core::const out=local::p_has value=" has7=";
+#call core::const out=local::p_sum value=" sum=";
+#call core::const out=local::p_rev value=" rev=";
+
+#call std_str::concat args="local::p_idx,local::idx_text" out=local::s0;
+#call std_str::concat args="local::s0,local::p_has" out=local::s1;
+#call std_str::concat args="local::s1,local::has7_text" out=local::s2;
+#call std_str::concat args="local::s2,local::p_sum" out=local::s3;
+#call std_str::concat args="local::s3,local::sum_text" out=local::s4;
+#call std_str::concat args="local::s4,local::p_rev" out=local::s5;
+#call std_str::concat args="local::s5,local::rev_text" out=return::value;
+#call core::exit;

@@ -11,6 +11,9 @@
 #call core::import alias="sort" path="./sort/mod.imp";
 #call core::import alias="enumx" path="./enum.imp";
 #call core::import alias="cobj" path="./custom_object.imp";
+#call core::import alias="col" path="./collections.imp";
+#call core::import alias="iter" path="./iter.imp";
+#call core::import alias="algo" path="./algo.imp";
 #call core::import alias="output" path="./output.imp";
 
 #call core::mod::export name="not" value=bool::not;
@@ -130,6 +133,25 @@
 #call core::mod::export name="cobj_pick" value=cobj::pick;
 #call core::mod::export name="cobj_with2" value=cobj::with2;
 #call core::mod::export name="cobj_with3" value=cobj::with3;
+
+#call core::mod::export name="col_new" value=col::new;
+#call core::mod::export name="col_push" value=col::push;
+#call core::mod::export name="col_swap" value=col::swap;
+#call core::mod::export name="col_at" value=col::at;
+#call core::mod::export name="col_clone" value=col::clone;
+#call core::mod::export name="col_reverse" value=col::reverse;
+#call core::mod::export name="col_from2" value=col::from2;
+#call core::mod::export name="col_from3" value=col::from3;
+#call core::mod::export name="col_from4" value=col::from4;
+
+#call core::mod::export name="iter_reduce_sum" value=iter::reduce_sum;
+#call core::mod::export name="iter_any_eq" value=iter::any_eq;
+#call core::mod::export name="iter_map_mul_scalar" value=iter::map_mul_scalar;
+
+#call core::mod::export name="algo_find_index" value=algo::find_index;
+#call core::mod::export name="algo_contains" value=algo::contains;
+#call core::mod::export name="algo_min_value" value=algo::min_value;
+#call core::mod::export name="algo_max_value" value=algo::max_value;
 
 #call core::mod::export name="output_join_parts" value=output::join_parts;
 #call core::mod::export name="output_join_values" value=output::join_values;
