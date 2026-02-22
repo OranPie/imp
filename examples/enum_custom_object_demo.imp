@@ -1,0 +1,42 @@
+#call core::import alias="std_enum" path="../stdlib/enum.imp";
+#call core::import alias="std_cobj" path="../stdlib/custom_object.imp";
+#call core::import alias="std_map" path="../stdlib/map.imp";
+#call core::import alias="std_str" path="../stdlib/string.imp";
+
+#call std_map::new out=local::keys;
+#call core::const out=local::i0 value=0;
+#call core::const out=local::i1 value=1;
+#call core::const out=local::i2 value=2;
+#call core::const out=local::n3 value=3;
+#call core::const out=local::k_id value="id";
+#call core::const out=local::k_name value="name";
+#call core::const out=local::k_active value="active";
+#call std_map::set args="local::keys,local::i0,local::k_id" out=local::keys;
+#call std_map::set args="local::keys,local::i1,local::k_name" out=local::keys;
+#call std_map::set args="local::keys,local::i2,local::k_active" out=local::keys;
+
+#call std_map::new out=local::values;
+#call core::const out=local::v_id value=7;
+#call core::const out=local::v_name value="Ada";
+#call core::const out=local::v_active value=true;
+#call std_map::set args="local::values,local::i0,local::v_id" out=local::values;
+#call std_map::set args="local::values,local::i1,local::v_name" out=local::values;
+#call std_map::set args="local::values,local::i2,local::v_active" out=local::values;
+
+#call std_cobj::define args="local::keys,local::values,local::n3" out=local::profile;
+
+#call core::const out=local::ok_tag value="Ok";
+#call std_enum::variant args="local::ok_tag,local::profile" out=local::result;
+#call std_enum::is_tag args="local::result,local::ok_tag" out=local::is_ok;
+
+#call core::const out=local::msg_bad_tag value="unexpected enum tag";
+#call std_enum::expect_payload args="local::result,local::ok_tag,local::msg_bad_tag" out=local::payload;
+#call std_cobj::get args="local::payload,local::k_name" out=local::name;
+
+#call std_str::to_text args="local::is_ok" out=local::ok_text;
+#call core::const out=local::p0 value="ok=";
+#call core::const out=local::p1 value=" name=";
+#call std_str::concat args="local::p0,local::ok_text" out=local::line0;
+#call std_str::concat args="local::line0,local::p1" out=local::line1;
+#call std_str::concat args="local::line1,local::name" out=return::value;
+#call core::exit;

@@ -10,32 +10,37 @@
 #call core::const out=local::k4 value=4;
 #call core::const out=local::n value=5;
 
-#call core::const out=local::v0 value=5;
-#call core::const out=local::v1 value=1;
-#call core::const out=local::v2 value=4;
-#call core::const out=local::v3 value=2;
-#call core::const out=local::v4 value=8;
+#call core::const out=local::v0 value=9;
+#call core::const out=local::v1 value=3;
+#call core::const out=local::v2 value=8;
+#call core::const out=local::v3 value=1;
+#call core::const out=local::v4 value=7;
 #call std_map::set args="local::arr,local::k0,local::v0" out=local::arr;
 #call std_map::set args="local::arr,local::k1,local::v1" out=local::arr;
 #call std_map::set args="local::arr,local::k2,local::v2" out=local::arr;
 #call std_map::set args="local::arr,local::k3,local::v3" out=local::arr;
 #call std_map::set args="local::arr,local::k4,local::v4" out=local::arr;
 
-#call std_sort::bubble_asc args="local::arr,local::n" out=local::arr;
+#call core::const out=local::one value=1;
+#call core::const out=local::four value=4;
+#call std_sort::bubble_partial_by args="local::arr,local::n,local::one,std_sort::comp_asc" out=local::arr;
+#call std_sort::bubble_range_by args="local::arr,local::k0,local::four,std_sort::comp_asc" out=local::arr;
+
+#call std_sort::is_sorted_asc args="local::arr,local::n" out=local::sorted;
 
 #call std_map::get args="local::arr,local::k0" out=local::a0;
 #call std_map::get args="local::arr,local::k1" out=local::a1;
 #call std_map::get args="local::arr,local::k2" out=local::a2;
 #call std_map::get args="local::arr,local::k3" out=local::a3;
 #call std_map::get args="local::arr,local::k4" out=local::a4;
-
 #call std_str::to_text args="local::a0" out=local::t0;
 #call std_str::to_text args="local::a1" out=local::t1;
 #call std_str::to_text args="local::a2" out=local::t2;
 #call std_str::to_text args="local::a3" out=local::t3;
 #call std_str::to_text args="local::a4" out=local::t4;
-#call core::const out=local::comma value=",";
+#call std_str::to_text args="local::sorted" out=local::sorted_text;
 
+#call core::const out=local::comma value=",";
 #call std_str::concat args="local::t0,local::comma" out=local::s0;
 #call std_str::concat args="local::s0,local::t1" out=local::s1;
 #call std_str::concat args="local::s1,local::comma" out=local::s2;
@@ -43,5 +48,9 @@
 #call std_str::concat args="local::s3,local::comma" out=local::s4;
 #call std_str::concat args="local::s4,local::t3" out=local::s5;
 #call std_str::concat args="local::s5,local::comma" out=local::s6;
-#call std_str::concat args="local::s6,local::t4" out=return::value;
+#call std_str::concat args="local::s6,local::t4" out=local::line;
+
+#call core::const out=local::suffix value=" sorted=";
+#call std_str::concat args="local::line,local::suffix" out=local::line2;
+#call std_str::concat args="local::line2,local::sorted_text" out=return::value;
 #call core::exit;

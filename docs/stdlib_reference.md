@@ -91,9 +91,66 @@ Functions:
 - `ratio_or(part, total, fallback)`
 - `weighted_score(base, bonus, multiplier)`
 
-## sort.imp
+## sort/ (directory module)
 
-- `bubble_asc(obj, n)` sorts keys `0..n-1` ascending (in-place object update)
+Comparator contract (`comp(a,b) -> bool`):
+- return `true` when the left element should move right (swap)
+- return `false` when the pair order is already correct
+- custom comparator functions are supported (including user-defined functions)
+
+Built-in comparators:
+- `comp_asc(a,b)` numeric/text ascending comparator
+- `comp_desc(a,b)` numeric/text descending comparator
+
+Bubble methods:
+- `bubble_cfg(obj, start, end, max_passes, comp)`
+- `bubble_by(obj, n, comp)`
+- `bubble_asc(obj, n)`
+- `bubble_desc(obj, n)`
+- `bubble_range_by(obj, start, end, comp)`
+- `bubble_partial_by(obj, n, max_passes, comp)`
+
+Selection methods:
+- `selection_by(obj, n, comp)`
+- `selection_asc(obj, n)`
+- `selection_desc(obj, n)`
+
+Check methods:
+- `is_sorted_by(obj, n, comp) -> bool`
+- `is_sorted_asc(obj, n) -> bool`
+- `is_sorted_desc(obj, n) -> bool`
+
+Compatibility:
+- `stdlib/sort.imp` remains as a shim that re-exports from `stdlib/sort/mod.imp`
+
+## enum.imp
+
+Core constructors/accessors:
+- `variant(tag, payload) -> obj`
+- `unit(tag) -> obj`
+- `tag(value) -> scalar|null`
+- `payload(value) -> scalar|null`
+- `payload_or(value, fallback) -> scalar`
+
+Tag checks/control:
+- `is_tag(value, tag) -> bool`
+- `expect_payload(value, tag, msg) -> payload | throw`
+- `match_tag(value, tag, when_true, when_false) -> scalar`
+
+## custom_object.imp
+
+Basic object ops:
+- `new() -> obj`
+- `set(obj, key, value) -> obj`
+- `get(obj, key) -> scalar|null`
+- `has(obj, key) -> bool`
+
+Configurable builders:
+- `define(keys, values, n) -> obj`
+- `patch(obj, keys, values, n) -> obj`
+- `pick(obj, keys, n) -> obj`
+- `with2(k1, v1, k2, v2) -> obj`
+- `with3(k1, v1, k2, v2, k3, v3) -> obj`
 
 ## output.imp
 

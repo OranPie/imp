@@ -499,6 +499,26 @@ impl Vm {
         handle
     }
 
+    fn bridge_value_for_module(&mut self, module: &Arc<CompiledModule>, value: &Value) -> Value {
+        match value {
+            Value::Func(func_id) => {
+                if let Some(foreign) = self.foreign_funcs.get(func_id).cloned() {
+                    Value::Func(self.register_foreign_func(foreign.module, foreign.func_id))
+                } else if module.function(*func_id).is_some() {
+                    Value::Func(self.register_foreign_func(Arc::clone(module), *func_id))
+                } else {
+                    Value::Func(*func_id)
+                }
+            }
+            Value::Obj(map) => Value::Obj(
+                map.iter()
+                    .map(|(key, value)| (key.clone(), self.bridge_value_for_module(module, value)))
+                    .collect(),
+            ),
+            _ => value.clone(),
+        }
+    }
+
     fn execute_function(
         &mut self,
         module: &CompiledModule,
@@ -509,10 +529,15 @@ impl Vm {
         if module.function(func_id).is_none() {
             if let Some(foreign) = self.foreign_funcs.get(&func_id).cloned() {
                 let mut foreign_globals = self.build_module_globals(&foreign.module)?;
+                let caller_module = Arc::new(module.clone());
+                let bridged_args = args
+                    .iter()
+                    .map(|value| self.bridge_value_for_module(&caller_module, value))
+                    .collect::<Vec<_>>();
                 return self.execute_function(
                     &foreign.module,
                     foreign.func_id,
-                    args,
+                    &bridged_args,
                     &mut foreign_globals,
                 );
             }
@@ -1745,6 +1770,18 @@ mod tests {
         assert_eq!(
             run_example("bubble_sort_demo.imp"),
             vec![Value::Str(Arc::from("1,2,4,5,8"))]
+        );
+        assert_eq!(
+            run_example("sort_custom_comp_demo.imp"),
+            vec![Value::Str(Arc::from("1,-2,3,-4"))]
+        );
+        assert_eq!(
+            run_example("sort_config_demo.imp"),
+            vec![Value::Str(Arc::from("1,3,7,8,9 sorted=true"))]
+        );
+        assert_eq!(
+            run_example("enum_custom_object_demo.imp"),
+            vec![Value::Str(Arc::from("ok=true name=Ada"))]
         );
         assert_eq!(
             run_example("output_collections_demo.imp"),

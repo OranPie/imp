@@ -1,0 +1,45 @@
+#call core::import alias="cmp" path="./comparators.imp";
+
+#call core::fn::begin name=main::is_sorted_by args="obj,n,comp" retshape="scalar";
+#call core::const out=local::zero value=0;
+#call core::const out=local::one value=1;
+#call core::const out=local::two value=2;
+#call core::lt a=arg::n b=local::two out=local::too_short;
+#call core::br cond=local::too_short then="ret_true" else="init";
+#call core::label name="init";
+#call core::mov from=local::zero to=local::i;
+#call core::sub a=arg::n b=local::one out=local::limit;
+#call core::label name="loop_check";
+#call core::lt a=local::i b=local::limit out=local::can_continue;
+#call core::br cond=local::can_continue then="loop_body" else="ret_true";
+#call core::label name="loop_body";
+#call core::obj::get obj=arg::obj key=local::i out=local::left;
+#call core::add a=local::i b=local::one out=local::j;
+#call core::obj::get obj=arg::obj key=local::j out=local::right;
+#call core::invoke fn=arg::comp args="local::left,local::right" out=local::should_swap;
+#call core::br cond=local::should_swap then="ret_false" else="inc";
+#call core::label name="inc";
+#call core::add a=local::i b=local::one out=local::i;
+#call core::jump target="loop_check";
+#call core::label name="ret_true";
+#call core::const out=return::value value=true;
+#call core::exit;
+#call core::label name="ret_false";
+#call core::const out=return::value value=false;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::is_sorted_asc args="obj,n" retshape="scalar";
+#call main::is_sorted_by args="arg::obj,arg::n,cmp::comp_asc" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::is_sorted_desc args="obj,n" retshape="scalar";
+#call main::is_sorted_by args="arg::obj,arg::n,cmp::comp_desc" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="is_sorted_by" value=main::is_sorted_by;
+#call core::mod::export name="is_sorted_asc" value=main::is_sorted_asc;
+#call core::mod::export name="is_sorted_desc" value=main::is_sorted_desc;
+#call core::exit;

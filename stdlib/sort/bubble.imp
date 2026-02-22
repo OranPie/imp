@@ -1,0 +1,81 @@
+#call core::import alias="cmp" path="./comparators.imp";
+
+#call core::fn::begin name=main::bubble_cfg args="obj,start,end,max_passes,comp" retshape="scalar";
+#call core::mov from=arg::obj to=local::obj;
+#call core::const out=local::zero value=0;
+#call core::const out=local::one value=1;
+#call core::const out=local::two value=2;
+#call core::sub a=arg::end b=arg::start out=local::range_len;
+#call core::lt a=local::range_len b=local::two out=local::too_short;
+#call core::br cond=local::too_short then="ret_obj" else="init_outer";
+#call core::label name="init_outer";
+#call core::sub a=local::range_len b=local::one out=local::max_useful_passes;
+#call core::mov from=local::zero to=local::i;
+#call core::label name="outer_check";
+#call core::lt a=local::i b=arg::max_passes out=local::within_pass_budget;
+#call core::br cond=local::within_pass_budget then="check_range" else="ret_obj";
+#call core::label name="check_range";
+#call core::lt a=local::i b=local::max_useful_passes out=local::within_range;
+#call core::br cond=local::within_range then="outer_body" else="ret_obj";
+#call core::label name="outer_body";
+#call core::mov from=arg::start to=local::j;
+#call core::sub a=arg::end b=local::one out=local::end_minus_one;
+#call core::sub a=local::end_minus_one b=local::i out=local::right_bound;
+#call core::label name="inner_check";
+#call core::lt a=local::j b=local::right_bound out=local::inner_continue;
+#call core::br cond=local::inner_continue then="compare" else="outer_inc";
+#call core::label name="compare";
+#call core::obj::get obj=local::obj key=local::j out=local::left;
+#call core::add a=local::j b=local::one out=local::j_next;
+#call core::obj::get obj=local::obj key=local::j_next out=local::right;
+#call core::invoke fn=arg::comp args="local::left,local::right" out=local::should_swap;
+#call core::br cond=local::should_swap then="swap" else="inner_inc";
+#call core::label name="swap";
+#call core::obj::set obj=local::obj key=local::j value=local::right out=local::obj;
+#call core::obj::set obj=local::obj key=local::j_next value=local::left out=local::obj;
+#call core::label name="inner_inc";
+#call core::add a=local::j b=local::one out=local::j;
+#call core::jump target="inner_check";
+#call core::label name="outer_inc";
+#call core::add a=local::i b=local::one out=local::i;
+#call core::jump target="outer_check";
+#call core::label name="ret_obj";
+#call core::mov from=local::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::bubble_by args="obj,n,comp" retshape="scalar";
+#call core::const out=local::zero value=0;
+#call main::bubble_cfg args="arg::obj,local::zero,arg::n,arg::n,arg::comp" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::bubble_asc args="obj,n" retshape="scalar";
+#call main::bubble_by args="arg::obj,arg::n,cmp::comp_asc" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::bubble_desc args="obj,n" retshape="scalar";
+#call main::bubble_by args="arg::obj,arg::n,cmp::comp_desc" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::bubble_range_by args="obj,start,end,comp" retshape="scalar";
+#call core::sub a=arg::end b=arg::start out=local::max_passes;
+#call main::bubble_cfg args="arg::obj,arg::start,arg::end,local::max_passes,arg::comp" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::bubble_partial_by args="obj,n,max_passes,comp" retshape="scalar";
+#call core::const out=local::zero value=0;
+#call main::bubble_cfg args="arg::obj,local::zero,arg::n,arg::max_passes,arg::comp" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="bubble_cfg" value=main::bubble_cfg;
+#call core::mod::export name="bubble_by" value=main::bubble_by;
+#call core::mod::export name="bubble_asc" value=main::bubble_asc;
+#call core::mod::export name="bubble_desc" value=main::bubble_desc;
+#call core::mod::export name="bubble_range_by" value=main::bubble_range_by;
+#call core::mod::export name="bubble_partial_by" value=main::bubble_partial_by;
+#call core::exit;

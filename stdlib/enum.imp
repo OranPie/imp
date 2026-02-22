@@ -1,0 +1,73 @@
+#call core::fn::begin name=main::variant args="tag,payload" retshape="scalar";
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key="tag" value=arg::tag out=local::obj;
+#call core::obj::set obj=local::obj key="payload" value=arg::payload out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::unit args="tag" retshape="scalar";
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key="tag" value=arg::tag out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::tag args="value" retshape="scalar";
+#call core::obj::get obj=arg::value key="tag" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::payload args="value" retshape="scalar";
+#call core::obj::get obj=arg::value key="payload" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::payload_or args="value,fallback" retshape="scalar";
+#call core::obj::get obj=arg::value key="payload" out=local::payload;
+#call core::const out=local::null value=null;
+#call core::eq a=local::payload b=local::null out=local::is_null;
+#call core::br cond=local::is_null then="ret_fallback" else="ret_payload";
+#call core::label name="ret_fallback";
+#call core::mov from=arg::fallback to=return::value;
+#call core::exit;
+#call core::label name="ret_payload";
+#call core::mov from=local::payload to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::is_tag args="value,tag" retshape="scalar";
+#call core::obj::get obj=arg::value key="tag" out=local::got;
+#call core::eq a=local::got b=arg::tag out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::expect_payload args="value,tag,msg" retshape="scalar";
+#call main::is_tag args="arg::value,arg::tag" out=local::ok;
+#call core::br cond=local::ok then="ret_payload" else="throw";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="enum_tag_mismatch" msg="enum tag mismatch";
+#call core::label name="ret_payload";
+#call core::obj::get obj=arg::value key="payload" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::match_tag args="value,tag,when_true,when_false" retshape="scalar";
+#call main::is_tag args="arg::value,arg::tag" out=local::ok;
+#call core::br cond=local::ok then="ret_true" else="ret_false";
+#call core::label name="ret_true";
+#call core::mov from=arg::when_true to=return::value;
+#call core::exit;
+#call core::label name="ret_false";
+#call core::mov from=arg::when_false to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="variant" value=main::variant;
+#call core::mod::export name="unit" value=main::unit;
+#call core::mod::export name="tag" value=main::tag;
+#call core::mod::export name="payload" value=main::payload;
+#call core::mod::export name="payload_or" value=main::payload_or;
+#call core::mod::export name="is_tag" value=main::is_tag;
+#call core::mod::export name="expect_payload" value=main::expect_payload;
+#call core::mod::export name="match_tag" value=main::match_tag;
+#call core::exit;

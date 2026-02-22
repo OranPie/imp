@@ -1,47 +1,46 @@
 #call core::import alias="std_map" path="../stdlib/map.imp";
 #call core::import alias="std_sort" path="../stdlib/sort/mod.imp";
 #call core::import alias="std_str" path="../stdlib/string.imp";
+#call core::import alias="std_math" path="../stdlib/math.imp";
+
+#call core::fn::begin name=main::cmp_abs_asc args="a,b" retshape="scalar";
+#call std_math::abs args="arg::a" out=local::aa;
+#call std_math::abs args="arg::b" out=local::bb;
+#call core::lt a=local::bb b=local::aa out=return::value;
+#call core::exit;
+#call core::fn::end;
 
 #call std_map::new out=local::arr;
 #call core::const out=local::k0 value=0;
 #call core::const out=local::k1 value=1;
 #call core::const out=local::k2 value=2;
 #call core::const out=local::k3 value=3;
-#call core::const out=local::k4 value=4;
-#call core::const out=local::n value=5;
+#call core::const out=local::n value=4;
 
-#call core::const out=local::v0 value=5;
+#call core::const out=local::v0 value=-4;
 #call core::const out=local::v1 value=1;
-#call core::const out=local::v2 value=4;
-#call core::const out=local::v3 value=2;
-#call core::const out=local::v4 value=8;
+#call core::const out=local::v2 value=-2;
+#call core::const out=local::v3 value=3;
 #call std_map::set args="local::arr,local::k0,local::v0" out=local::arr;
 #call std_map::set args="local::arr,local::k1,local::v1" out=local::arr;
 #call std_map::set args="local::arr,local::k2,local::v2" out=local::arr;
 #call std_map::set args="local::arr,local::k3,local::v3" out=local::arr;
-#call std_map::set args="local::arr,local::k4,local::v4" out=local::arr;
 
-#call std_sort::bubble_asc args="local::arr,local::n" out=local::arr;
+#call std_sort::bubble_by args="local::arr,local::n,main::cmp_abs_asc" out=local::arr;
 
 #call std_map::get args="local::arr,local::k0" out=local::a0;
 #call std_map::get args="local::arr,local::k1" out=local::a1;
 #call std_map::get args="local::arr,local::k2" out=local::a2;
 #call std_map::get args="local::arr,local::k3" out=local::a3;
-#call std_map::get args="local::arr,local::k4" out=local::a4;
-
 #call std_str::to_text args="local::a0" out=local::t0;
 #call std_str::to_text args="local::a1" out=local::t1;
 #call std_str::to_text args="local::a2" out=local::t2;
 #call std_str::to_text args="local::a3" out=local::t3;
-#call std_str::to_text args="local::a4" out=local::t4;
 #call core::const out=local::comma value=",";
-
 #call std_str::concat args="local::t0,local::comma" out=local::s0;
 #call std_str::concat args="local::s0,local::t1" out=local::s1;
 #call std_str::concat args="local::s1,local::comma" out=local::s2;
 #call std_str::concat args="local::s2,local::t2" out=local::s3;
 #call std_str::concat args="local::s3,local::comma" out=local::s4;
-#call std_str::concat args="local::s4,local::t3" out=local::s5;
-#call std_str::concat args="local::s5,local::comma" out=local::s6;
-#call std_str::concat args="local::s6,local::t4" out=return::value;
+#call std_str::concat args="local::s4,local::t3" out=return::value;
 #call core::exit;

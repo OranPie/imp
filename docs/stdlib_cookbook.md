@@ -55,6 +55,9 @@
 - `examples/complex_profile_validation.imp`
 - `examples/complex_retry_flow.imp`
 - `examples/bubble_sort_demo.imp`
+- `examples/sort_custom_comp_demo.imp`
+- `examples/sort_config_demo.imp`
+- `examples/enum_custom_object_demo.imp`
 - `examples/output_collections_demo.imp`
 
 ## 9) Bubble sort on numeric-index map
@@ -63,10 +66,36 @@
 #call std_sort::bubble_asc args="local::arr,local::n" out=local::arr;
 ```
 
-## 10) Parameterized output over mixed collections
+## 10) Custom comparator function sort
+
+```imp
+#call core::fn::begin name=main::my_comp args="a,b" retshape="scalar";
+#call core::lt a=arg::b b=arg::a out=return::value;
+#call core::exit;
+#call core::fn::end;
+#call std_sort::bubble_by args="local::arr,local::n,main::my_comp" out=local::arr;
+```
+
+## 11) Sort configs (range + partial passes)
+
+```imp
+#call std_sort::bubble_partial_by args="local::arr,local::n,local::passes,std_sort::comp_asc" out=local::arr;
+#call std_sort::bubble_range_by args="local::arr,local::start,local::end,std_sort::comp_asc" out=local::arr;
+#call std_sort::is_sorted_asc args="local::arr,local::n" out=local::ok;
+```
+
+## 12) Parameterized output over mixed collections
 
 ```imp
 #call std_output::join_parts args="local::parts,local::n,local::sep,local::prefix,local::suffix" out=local::txt_a;
 #call std_output::join_values args="local::obj,local::keys,local::n,local::sep,local::prefix,local::suffix" out=local::txt_b;
 #call std_output::join_pairs args="local::obj,local::keys,local::n,local::kv_sep,local::part_sep,local::prefix,local::suffix" out=local::txt_c;
+```
+
+## 13) Enum + custom object composition
+
+```imp
+#call std_cobj::define args="local::keys,local::values,local::n" out=local::payload;
+#call std_enum::variant args="local::ok_tag,local::payload" out=local::res;
+#call std_enum::expect_payload args="local::res,local::ok_tag,local::msg" out=local::obj;
 ```

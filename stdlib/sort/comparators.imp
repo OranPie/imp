@@ -1,0 +1,13 @@
+#call core::fn::begin name=main::comp_asc args="a,b" retshape="scalar";
+#call core::lt a=arg::b b=arg::a out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::comp_desc args="a,b" retshape="scalar";
+#call core::lt a=arg::a b=arg::b out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="comp_asc" value=main::comp_asc;
+#call core::mod::export name="comp_desc" value=main::comp_desc;
+#call core::exit;

@@ -15,6 +15,9 @@ Imp-Core v2.0 reference implementation in Rust.
 ```bash
 cargo run -p imp-cli -- run examples/complex_billing_pipeline.imp
 cargo run -p imp-cli -- run examples/bubble_sort_demo.imp
+cargo run -p imp-cli -- run examples/sort_custom_comp_demo.imp
+cargo run -p imp-cli -- run examples/sort_config_demo.imp
+cargo run -p imp-cli -- run examples/enum_custom_object_demo.imp
 cargo run -p imp-cli -- run examples/output_collections_demo.imp
 ```
 

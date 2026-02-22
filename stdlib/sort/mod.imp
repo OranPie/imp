@@ -1,0 +1,24 @@
+#call core::import alias="cmp" path="./comparators.imp";
+#call core::import alias="bubble" path="./bubble.imp";
+#call core::import alias="selection" path="./selection.imp";
+#call core::import alias="check" path="./check.imp";
+
+#call core::mod::export name="comp_asc" value=cmp::comp_asc;
+#call core::mod::export name="comp_desc" value=cmp::comp_desc;
+
+#call core::mod::export name="bubble_cfg" value=bubble::bubble_cfg;
+#call core::mod::export name="bubble_by" value=bubble::bubble_by;
+#call core::mod::export name="bubble_asc" value=bubble::bubble_asc;
+#call core::mod::export name="bubble_desc" value=bubble::bubble_desc;
+#call core::mod::export name="bubble_range_by" value=bubble::bubble_range_by;
+#call core::mod::export name="bubble_partial_by" value=bubble::bubble_partial_by;
+
+#call core::mod::export name="selection_by" value=selection::selection_by;
+#call core::mod::export name="selection_asc" value=selection::selection_asc;
+#call core::mod::export name="selection_desc" value=selection::selection_desc;
+
+#call core::mod::export name="is_sorted_by" value=check::is_sorted_by;
+#call core::mod::export name="is_sorted_asc" value=check::is_sorted_asc;
+#call core::mod::export name="is_sorted_desc" value=check::is_sorted_desc;
+
+#call core::exit;

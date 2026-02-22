@@ -8,7 +8,9 @@
 #call core::import alias="res" path="./result.imp";
 #call core::import alias="valid" path="./validate.imp";
 #call core::import alias="calc" path="./calc.imp";
-#call core::import alias="sort" path="./sort.imp";
+#call core::import alias="sort" path="./sort/mod.imp";
+#call core::import alias="enumx" path="./enum.imp";
+#call core::import alias="cobj" path="./custom_object.imp";
 #call core::import alias="output" path="./output.imp";
 
 #call core::mod::export name="not" value=bool::not;
@@ -95,7 +97,39 @@
 #call core::mod::export name="ratio_or" value=calc::ratio_or;
 #call core::mod::export name="weighted_score" value=calc::weighted_score;
 
+#call core::mod::export name="sort_comp_asc" value=sort::comp_asc;
+#call core::mod::export name="sort_comp_desc" value=sort::comp_desc;
+#call core::mod::export name="sort_bubble_cfg" value=sort::bubble_cfg;
+#call core::mod::export name="sort_bubble_by" value=sort::bubble_by;
 #call core::mod::export name="sort_bubble_asc" value=sort::bubble_asc;
+#call core::mod::export name="sort_bubble_desc" value=sort::bubble_desc;
+#call core::mod::export name="sort_bubble_range_by" value=sort::bubble_range_by;
+#call core::mod::export name="sort_bubble_partial_by" value=sort::bubble_partial_by;
+#call core::mod::export name="sort_selection_by" value=sort::selection_by;
+#call core::mod::export name="sort_selection_asc" value=sort::selection_asc;
+#call core::mod::export name="sort_selection_desc" value=sort::selection_desc;
+#call core::mod::export name="sort_is_sorted_by" value=sort::is_sorted_by;
+#call core::mod::export name="sort_is_sorted_asc" value=sort::is_sorted_asc;
+#call core::mod::export name="sort_is_sorted_desc" value=sort::is_sorted_desc;
+
+#call core::mod::export name="enum_variant" value=enumx::variant;
+#call core::mod::export name="enum_unit" value=enumx::unit;
+#call core::mod::export name="enum_tag" value=enumx::tag;
+#call core::mod::export name="enum_payload" value=enumx::payload;
+#call core::mod::export name="enum_payload_or" value=enumx::payload_or;
+#call core::mod::export name="enum_is_tag" value=enumx::is_tag;
+#call core::mod::export name="enum_expect_payload" value=enumx::expect_payload;
+#call core::mod::export name="enum_match_tag" value=enumx::match_tag;
+
+#call core::mod::export name="cobj_new" value=cobj::new;
+#call core::mod::export name="cobj_set" value=cobj::set;
+#call core::mod::export name="cobj_get" value=cobj::get;
+#call core::mod::export name="cobj_has" value=cobj::has;
+#call core::mod::export name="cobj_patch" value=cobj::patch;
+#call core::mod::export name="cobj_define" value=cobj::define;
+#call core::mod::export name="cobj_pick" value=cobj::pick;
+#call core::mod::export name="cobj_with2" value=cobj::with2;
+#call core::mod::export name="cobj_with3" value=cobj::with3;
 
 #call core::mod::export name="output_join_parts" value=output::join_parts;
 #call core::mod::export name="output_join_values" value=output::join_values;

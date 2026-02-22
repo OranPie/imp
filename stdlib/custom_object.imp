@@ -1,0 +1,93 @@
+#call core::fn::begin name=main::new args="" retshape="scalar";
+#call core::obj::new out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::set args="obj,key,value" retshape="scalar";
+#call core::obj::set obj=arg::obj key=arg::key value=arg::value out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::get args="obj,key" retshape="scalar";
+#call core::obj::get obj=arg::obj key=arg::key out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::has args="obj,key" retshape="scalar";
+#call core::obj::has obj=arg::obj key=arg::key out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::patch args="obj,keys,values,n" retshape="scalar";
+#call core::mov from=arg::obj to=local::obj;
+#call core::const out=local::zero value=0;
+#call core::const out=local::one value=1;
+#call core::mov from=local::zero to=local::i;
+#call core::label name="loop_check";
+#call core::lt a=local::i b=arg::n out=local::has_more;
+#call core::br cond=local::has_more then="loop_body" else="ret_obj";
+#call core::label name="loop_body";
+#call core::obj::get obj=arg::keys key=local::i out=local::key;
+#call core::obj::get obj=arg::values key=local::i out=local::value;
+#call core::obj::set obj=local::obj key=local::key value=local::value out=local::obj;
+#call core::add a=local::i b=local::one out=local::i;
+#call core::jump target="loop_check";
+#call core::label name="ret_obj";
+#call core::mov from=local::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::define args="keys,values,n" retshape="scalar";
+#call core::obj::new out=local::obj;
+#call main::patch args="local::obj,arg::keys,arg::values,arg::n" out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::pick args="obj,keys,n" retshape="scalar";
+#call core::obj::new out=local::out;
+#call core::const out=local::zero value=0;
+#call core::const out=local::one value=1;
+#call core::mov from=local::zero to=local::i;
+#call core::label name="loop_check";
+#call core::lt a=local::i b=arg::n out=local::has_more;
+#call core::br cond=local::has_more then="loop_body" else="ret_obj";
+#call core::label name="loop_body";
+#call core::obj::get obj=arg::keys key=local::i out=local::key;
+#call core::obj::has obj=arg::obj key=local::key out=local::exists;
+#call core::br cond=local::exists then="set_value" else="inc";
+#call core::label name="set_value";
+#call core::obj::get obj=arg::obj key=local::key out=local::value;
+#call core::obj::set obj=local::out key=local::key value=local::value out=local::out;
+#call core::label name="inc";
+#call core::add a=local::i b=local::one out=local::i;
+#call core::jump target="loop_check";
+#call core::label name="ret_obj";
+#call core::mov from=local::out to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::with2 args="k1,v1,k2,v2" retshape="scalar";
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key=arg::k1 value=arg::v1 out=local::obj;
+#call core::obj::set obj=local::obj key=arg::k2 value=arg::v2 out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::with3 args="k1,v1,k2,v2,k3,v3" retshape="scalar";
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key=arg::k1 value=arg::v1 out=local::obj;
+#call core::obj::set obj=local::obj key=arg::k2 value=arg::v2 out=local::obj;
+#call core::obj::set obj=local::obj key=arg::k3 value=arg::v3 out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="new" value=main::new;
+#call core::mod::export name="set" value=main::set;
+#call core::mod::export name="get" value=main::get;
+#call core::mod::export name="has" value=main::has;
+#call core::mod::export name="patch" value=main::patch;
+#call core::mod::export name="define" value=main::define;
+#call core::mod::export name="pick" value=main::pick;
+#call core::mod::export name="with2" value=main::with2;
+#call core::mod::export name="with3" value=main::with3;
+#call core::exit;
