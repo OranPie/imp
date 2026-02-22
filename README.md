@@ -6,6 +6,7 @@ Imp-Core v2.0 reference implementation in Rust.
 
 - Parse/compile/VM execution pipeline
 - Runtime JIT path with interpreter fallback
+- AOT bytecode build/load pipeline (`.impc`)
 - Module import/export system
 - Expanded stdlib written in `.imp`
 - Complex example programs
@@ -14,6 +15,8 @@ Imp-Core v2.0 reference implementation in Rust.
 
 ```bash
 cargo run -p imp-cli -- run examples/complex_billing_pipeline.imp
+cargo run -p imp-cli -- build examples/complex_billing_pipeline.imp -o /tmp/billing.impc
+cargo run -p imp-cli -- run /tmp/billing.impc
 cargo run -p imp-cli -- run examples/bubble_sort_demo.imp
 cargo run -p imp-cli -- run examples/sort_custom_comp_demo.imp
 cargo run -p imp-cli -- run examples/sort_config_demo.imp

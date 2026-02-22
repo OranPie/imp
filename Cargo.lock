@@ -194,10 +194,21 @@ name = "imp-ast"
 version = "0.1.0"
 
 [[package]]
-name = "imp-cli"
+name = "imp-bytecode"
 version = "0.1.0"
 dependencies = [
  "imp-compiler",
+ "imp-ir",
+ "imp-vm",
+]
+
+[[package]]
+name = "imp-cli"
+version = "0.1.0"
+dependencies = [
+ "imp-bytecode",
+ "imp-compiler",
+ "imp-ir",
  "imp-vm",
 ]
 

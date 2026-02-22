@@ -2,6 +2,7 @@
 members = [
   "crates/imp-ast",
   "crates/imp-ir",
+  "crates/imp-bytecode",
   "crates/imp-std",
   "crates/imp-compiler",
   "crates/imp-vm",

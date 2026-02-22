@@ -420,6 +420,7 @@ pub struct Vm {
     active_module: Option<CompiledModule>,
     jit_cache: HashMap<JitKey, Arc<JitFunction>>,
     foreign_funcs: HashMap<FuncId, ForeignFunc>,
+    import_export_cache: HashMap<String, HashMap<String, Value>>,
     next_foreign_func_id: FuncId,
 }
 
@@ -430,6 +431,7 @@ impl Vm {
             active_module: None,
             jit_cache: HashMap::new(),
             foreign_funcs: HashMap::new(),
+            import_export_cache: HashMap::new(),
             next_foreign_func_id: 1_000_000,
         }
     }
@@ -467,14 +469,26 @@ impl Vm {
         }
 
         for import in &module.imports {
-            let imported = self.run_main(&import.module)?;
-            for (name, destination) in &import.export_to_global {
-                if (*destination as usize) >= globals.len() {
-                    continue;
+            if !self.import_export_cache.contains_key(&import.path) {
+                let imported = self.run_main(&import.module)?;
+                let mut linked_exports = HashMap::new();
+                for (name, value) in &imported.exports {
+                    linked_exports.insert(
+                        name.clone(),
+                        self.link_imported_value(value, Arc::clone(&import.module)),
+                    );
                 }
-                if let Some(value) = imported.exports.get(name) {
-                    let linked = self.link_imported_value(value, Arc::clone(&import.module));
-                    globals[*destination as usize] = linked;
+                self.import_export_cache
+                    .insert(import.path.clone(), linked_exports);
+            }
+            let Some(cached_exports) = self.import_export_cache.get(&import.path) else {
+                continue;
+            };
+            for (name, destination) in &import.export_to_global {
+                if (*destination as usize) < globals.len()
+                    && let Some(value) = cached_exports.get(name)
+                {
+                    globals[*destination as usize] = value.clone();
                 }
             }
         }
@@ -483,11 +497,22 @@ impl Vm {
     }
 
     fn link_imported_value(&mut self, value: &Value, module: Arc<CompiledModule>) -> Value {
-        if let Value::Func(func_id) = value {
-            let handle = self.register_foreign_func(module, *func_id);
-            Value::Func(handle)
-        } else {
-            value.clone()
+        match value {
+            Value::Func(func_id) => {
+                let handle = self.register_foreign_func(module, *func_id);
+                Value::Func(handle)
+            }
+            Value::Obj(map) => Value::Obj(
+                map.iter()
+                    .map(|(key, value)| {
+                        (
+                            key.clone(),
+                            self.link_imported_value(value, Arc::clone(&module)),
+                        )
+                    })
+                    .collect(),
+            ),
+            _ => value.clone(),
         }
     }
 
@@ -1737,6 +1762,46 @@ mod tests {
         });
         let result = vm.run_main(&module).expect("run");
         assert_eq!(result.returns, vec![Value::Str(Arc::from("imp!"))]);
+    }
+
+    #[test]
+    fn imported_object_function_is_callable_across_modules() {
+        let temp = std::env::temp_dir();
+        let provider_path = temp.join("imp_provider_fn_holder.imp");
+        let consumer_path = temp.join("imp_consumer_fn_holder.imp");
+
+        let provider_src = r#"
+#call core::fn::begin name=main::double args="x" retshape="scalar";
+#call core::const out=local::two value=2;
+#call core::mul a=arg::x b=local::two out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::obj::new out=main::holder;
+#call core::obj::set obj=main::holder key="fn" value=main::double out=main::holder;
+#call core::mod::export name="holder" value=main::holder;
+#call core::exit;
+"#;
+        fs::write(&provider_path, provider_src).expect("write provider");
+
+        let consumer_src = format!(
+            r#"#call core::import alias="prov" path="{}";
+#call core::obj::get obj=prov::holder key="fn" out=local::fn_ref;
+#call core::const out=local::x value=4;
+#call core::invoke fn=local::fn_ref args="local::x" out=return::value;
+#call core::exit;
+"#,
+            provider_path.display()
+        );
+        fs::write(&consumer_path, consumer_src).expect("write consumer");
+
+        let module = compile_module(&consumer_path, &FsModuleLoader).expect("compile consumer");
+        let mut vm = Vm::new(VmConfig {
+            enable_host_print: false,
+            enable_jit: true,
+        });
+        let result = vm.run_main(&module).expect("run consumer");
+        assert_eq!(result.returns, vec![Value::Num(8.0)]);
     }
 
     fn run_example(name: &str) -> Vec<Value> {

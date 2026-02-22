@@ -1,12 +1,13 @@
 [package]
-name = "imp-cli"
+name = "imp-bytecode"
 version = "0.1.0"
 edition.workspace = true
 
 [dependencies]
-imp-bytecode = { path = "../imp-bytecode" }
-imp-compiler = { path = "../imp-compiler" }
 imp-ir = { path = "../imp-ir" }
+
+[dev-dependencies]
+imp-compiler = { path = "../imp-compiler" }
 imp-vm = { path = "../imp-vm" }
 
 [lints]
