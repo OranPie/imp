@@ -1,0 +1,8 @@
+#call core::fn::begin name=main::print args="value" retshape="scalar";
+#call core::host::print value=arg::value;
+#call core::mov from=arg::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="print" value=main::print;
+#call core::exit;

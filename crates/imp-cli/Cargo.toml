@@ -1,0 +1,11 @@
+[package]
+name = "imp-cli"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+imp-compiler = { path = "../imp-compiler" }
+imp-vm = { path = "../imp-vm" }
+
+[lints]
+workspace = true

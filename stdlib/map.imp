@@ -1,0 +1,45 @@
+#call core::fn::begin name=main::new args="" retshape="scalar";
+#call core::obj::new out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::get args="obj,key" retshape="scalar";
+#call core::obj::get obj=arg::obj key=arg::key out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::has args="obj,key" retshape="scalar";
+#call core::obj::has obj=arg::obj key=arg::key out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::get_or args="obj,key,fallback" retshape="scalar";
+#call core::obj::get obj=arg::obj key=arg::key out=local::value;
+#call core::const out=local::null value=null;
+#call core::eq a=local::value b=local::null out=local::is_null;
+#call core::br cond=local::is_null then="ret_fallback" else="ret_value";
+#call core::label name="ret_fallback";
+#call core::mov from=arg::fallback to=return::value;
+#call core::exit;
+#call core::label name="ret_value";
+#call core::mov from=local::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::require args="obj,key,msg" retshape="scalar";
+#call core::obj::has obj=arg::obj key=arg::key out=local::exists;
+#call core::br cond=local::exists then="ret_value" else="throw";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="missing_key" msg="required key not found";
+#call core::label name="ret_value";
+#call core::obj::get obj=arg::obj key=arg::key out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="new" value=main::new;
+#call core::mod::export name="get" value=main::get;
+#call core::mod::export name="has" value=main::has;
+#call core::mod::export name="get_or" value=main::get_or;
+#call core::mod::export name="require" value=main::require;
+#call core::exit;

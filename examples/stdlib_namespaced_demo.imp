@@ -1,0 +1,17 @@
+#call core::import alias="std_math" path="../stdlib/math.imp";
+#call core::import alias="std_ctrl" path="../stdlib/control.imp";
+#call core::import alias="std_str" path="../stdlib/string.imp";
+
+#call core::const out=local::x value=-3;
+#call std_math::abs args="local::x" out=local::absx;
+#call core::const out=local::low value=0;
+#call core::const out=local::high value=2;
+#call std_math::clamp args="local::absx,local::low,local::high" out=local::clamped;
+
+#call core::const out=local::ok value="OK: ";
+#call core::const out=local::bad value="BAD: ";
+#call core::const out=local::true value=true;
+#call std_ctrl::if_else args="local::true,local::ok,local::bad" out=local::prefix;
+#call std_str::concat args="local::prefix,local::clamped" out=local::msg;
+#call core::mov from=local::msg to=return::value;
+#call core::exit;

@@ -1,0 +1,8 @@
+#call core::import alias="std_ctrl" path="../stdlib/control.imp";
+
+#call core::const out=local::cond value=true;
+#call core::const out=local::a value="hello";
+#call core::const out=local::b value="world";
+#call std_ctrl::if_else args="local::cond,local::a,local::b" out=local::picked;
+#call core::mov from=local::picked to=return::value;
+#call core::exit;

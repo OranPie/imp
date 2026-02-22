@@ -1,0 +1,74 @@
+#call core::fn::begin name=main::ok args="value" retshape="scalar";
+#call core::const out=local::true value=true;
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key="ok" value=local::true out=local::obj;
+#call core::obj::set obj=local::obj key="value" value=arg::value out=local::obj;
+#call core::mov from=local::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::err args="message" retshape="scalar";
+#call core::const out=local::false value=false;
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key="ok" value=local::false out=local::obj;
+#call core::obj::set obj=local::obj key="error" value=arg::message out=local::obj;
+#call core::mov from=local::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::is_ok args="result" retshape="scalar";
+#call core::const out=local::k_ok value="ok";
+#call core::obj::get obj=arg::result key=local::k_ok out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::is_err args="result" retshape="scalar";
+#call core::const out=local::k_ok value="ok";
+#call core::const out=local::true value=true;
+#call core::const out=local::false value=false;
+#call core::obj::get obj=arg::result key=local::k_ok out=local::ok;
+#call core::br cond=local::ok then="ret_false" else="ret_true";
+#call core::label name="ret_true";
+#call core::mov from=local::true to=return::value;
+#call core::exit;
+#call core::label name="ret_false";
+#call core::mov from=local::false to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::unwrap_or args="result,fallback" retshape="scalar";
+#call core::const out=local::k_ok value="ok";
+#call core::const out=local::k_val value="value";
+#call core::obj::get obj=arg::result key=local::k_ok out=local::ok;
+#call core::br cond=local::ok then="ret_value" else="ret_fallback";
+#call core::label name="ret_value";
+#call core::obj::get obj=arg::result key=local::k_val out=return::value;
+#call core::exit;
+#call core::label name="ret_fallback";
+#call core::mov from=arg::fallback to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::expect args="result,msg_prefix" retshape="scalar";
+#call core::const out=local::k_ok value="ok";
+#call core::const out=local::k_val value="value";
+#call core::const out=local::k_err value="error";
+#call core::obj::get obj=arg::result key=local::k_ok out=local::ok;
+#call core::br cond=local::ok then="ret_value" else="throw";
+#call core::label name="ret_value";
+#call core::obj::get obj=arg::result key=local::k_val out=return::value;
+#call core::exit;
+#call core::label name="throw";
+#call core::obj::get obj=arg::result key=local::k_err out=local::err_msg;
+#call core::str::concat a=arg::msg_prefix b=local::err_msg out=local::full_msg;
+#call core::host::print value=local::full_msg;
+#call core::throw code="expect_failed" msg="expect failed";
+#call core::fn::end;
+
+#call core::mod::export name="ok" value=main::ok;
+#call core::mod::export name="err" value=main::err;
+#call core::mod::export name="is_ok" value=main::is_ok;
+#call core::mod::export name="is_err" value=main::is_err;
+#call core::mod::export name="unwrap_or" value=main::unwrap_or;
+#call core::mod::export name="expect" value=main::expect;
+#call core::exit;

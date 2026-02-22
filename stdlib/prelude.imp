@@ -1,0 +1,66 @@
+#call core::import alias="bool" path="./bool.imp";
+#call core::import alias="math" path="./math.imp";
+#call core::import alias="obj" path="./object.imp";
+#call core::import alias="io" path="./io.imp";
+#call core::import alias="ctrl" path="./control.imp";
+#call core::import alias="map" path="./map.imp";
+#call core::import alias="str" path="./string.imp";
+#call core::import alias="res" path="./result.imp";
+
+#call core::mod::export name="not" value=bool::not;
+#call core::mod::export name="and" value=bool::and;
+#call core::mod::export name="or" value=bool::or;
+#call core::mod::export name="xor" value=bool::xor;
+#call core::mod::export name="select" value=bool::select;
+#call core::mod::export name="is_null" value=bool::is_null;
+#call core::mod::export name="is_not_null" value=bool::is_not_null;
+
+#call core::mod::export name="add" value=math::add;
+#call core::mod::export name="sub" value=math::sub;
+#call core::mod::export name="mul" value=math::mul;
+#call core::mod::export name="div" value=math::div;
+#call core::mod::export name="inc" value=math::inc;
+#call core::mod::export name="dec" value=math::dec;
+#call core::mod::export name="sum3" value=math::sum3;
+#call core::mod::export name="avg2" value=math::avg2;
+#call core::mod::export name="abs" value=math::abs;
+#call core::mod::export name="sign" value=math::sign;
+#call core::mod::export name="is_positive" value=math::is_positive;
+#call core::mod::export name="is_negative" value=math::is_negative;
+#call core::mod::export name="min" value=math::min;
+#call core::mod::export name="max" value=math::max;
+#call core::mod::export name="clamp" value=math::clamp;
+#call core::mod::export name="between" value=math::between;
+
+#call core::mod::export name="point2" value=obj::point2;
+#call core::mod::export name="pair" value=obj::pair;
+#call core::mod::export name="result_ok" value=obj::result_ok;
+#call core::mod::export name="result_err" value=obj::result_err;
+
+#call core::mod::export name="if_else" value=ctrl::if_else;
+#call core::mod::export name="coalesce" value=ctrl::coalesce;
+#call core::mod::export name="require_not_null" value=ctrl::require_not_null;
+#call core::mod::export name="assert_true" value=ctrl::assert_true;
+#call core::mod::export name="assert_eq" value=ctrl::assert_eq;
+
+#call core::mod::export name="map_new" value=map::new;
+#call core::mod::export name="map_get" value=map::get;
+#call core::mod::export name="map_has" value=map::has;
+#call core::mod::export name="map_get_or" value=map::get_or;
+#call core::mod::export name="map_require" value=map::require;
+
+#call core::mod::export name="str_concat" value=str::concat;
+#call core::mod::export name="str_concat3" value=str::concat3;
+#call core::mod::export name="str_len" value=str::len;
+#call core::mod::export name="str_is_empty" value=str::is_empty;
+#call core::mod::export name="str_prefix" value=str::prefix;
+
+#call core::mod::export name="ok" value=res::ok;
+#call core::mod::export name="err" value=res::err;
+#call core::mod::export name="is_ok" value=res::is_ok;
+#call core::mod::export name="is_err" value=res::is_err;
+#call core::mod::export name="unwrap_or" value=res::unwrap_or;
+#call core::mod::export name="expect" value=res::expect;
+
+#call core::mod::export name="print" value=io::print;
+#call core::exit;

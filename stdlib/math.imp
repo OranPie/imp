@@ -1,0 +1,161 @@
+#call core::fn::begin name=main::add args="a,b" retshape="scalar";
+#call core::add a=arg::a b=arg::b out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::sub args="a,b" retshape="scalar";
+#call core::sub a=arg::a b=arg::b out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::mul args="a,b" retshape="scalar";
+#call core::mul a=arg::a b=arg::b out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::div args="a,b" retshape="scalar";
+#call core::div a=arg::a b=arg::b out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::inc args="x" retshape="scalar";
+#call core::const out=local::one value=1;
+#call core::add a=arg::x b=local::one out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::dec args="x" retshape="scalar";
+#call core::const out=local::one value=1;
+#call core::sub a=arg::x b=local::one out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::sum3 args="a,b,c" retshape="scalar";
+#call core::add a=arg::a b=arg::b out=local::ab;
+#call core::add a=local::ab b=arg::c out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::avg2 args="a,b" retshape="scalar";
+#call core::const out=local::two value=2;
+#call core::add a=arg::a b=arg::b out=local::sum;
+#call core::div a=local::sum b=local::two out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::abs args="x" retshape="scalar";
+#call core::const out=local::zero value=0;
+#call core::lt a=arg::x b=local::zero out=local::is_neg;
+#call core::br cond=local::is_neg then="neg" else="pos";
+#call core::label name="neg";
+#call core::sub a=local::zero b=arg::x out=return::value;
+#call core::exit;
+#call core::label name="pos";
+#call core::mov from=arg::x to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::sign args="x" retshape="scalar";
+#call core::const out=local::zero value=0;
+#call core::const out=local::one value=1;
+#call core::const out=local::neg_one value=-1;
+#call core::lt a=arg::x b=local::zero out=local::is_neg;
+#call core::br cond=local::is_neg then="ret_neg" else="check_zero";
+#call core::label name="check_zero";
+#call core::eq a=arg::x b=local::zero out=local::is_zero;
+#call core::br cond=local::is_zero then="ret_zero" else="ret_pos";
+#call core::label name="ret_neg";
+#call core::mov from=local::neg_one to=return::value;
+#call core::exit;
+#call core::label name="ret_zero";
+#call core::mov from=local::zero to=return::value;
+#call core::exit;
+#call core::label name="ret_pos";
+#call core::mov from=local::one to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::is_positive args="x" retshape="scalar";
+#call core::const out=local::zero value=0;
+#call core::lt a=local::zero b=arg::x out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::is_negative args="x" retshape="scalar";
+#call core::const out=local::zero value=0;
+#call core::lt a=arg::x b=local::zero out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::min args="a,b" retshape="scalar";
+#call core::lt a=arg::a b=arg::b out=local::a_is_less;
+#call core::br cond=local::a_is_less then="ret_a" else="ret_b";
+#call core::label name="ret_a";
+#call core::mov from=arg::a to=return::value;
+#call core::exit;
+#call core::label name="ret_b";
+#call core::mov from=arg::b to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::max args="a,b" retshape="scalar";
+#call core::lt a=arg::a b=arg::b out=local::a_is_less;
+#call core::br cond=local::a_is_less then="ret_b" else="ret_a";
+#call core::label name="ret_a";
+#call core::mov from=arg::a to=return::value;
+#call core::exit;
+#call core::label name="ret_b";
+#call core::mov from=arg::b to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::clamp args="value,low,high" retshape="scalar";
+#call core::lt a=arg::value b=arg::low out=local::is_low;
+#call core::br cond=local::is_low then="ret_low" else="check_high";
+#call core::label name="check_high";
+#call core::lt a=arg::high b=arg::value out=local::is_high;
+#call core::br cond=local::is_high then="ret_high" else="ret_value";
+#call core::label name="ret_low";
+#call core::mov from=arg::low to=return::value;
+#call core::exit;
+#call core::label name="ret_high";
+#call core::mov from=arg::high to=return::value;
+#call core::exit;
+#call core::label name="ret_value";
+#call core::mov from=arg::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::between args="value,low,high" retshape="scalar";
+#call core::const out=local::true value=true;
+#call core::const out=local::false value=false;
+#call core::lt a=arg::value b=arg::low out=local::below_low;
+#call core::br cond=local::below_low then="ret_false" else="check_high";
+#call core::label name="check_high";
+#call core::lt a=arg::high b=arg::value out=local::above_high;
+#call core::br cond=local::above_high then="ret_false" else="ret_true";
+#call core::label name="ret_true";
+#call core::mov from=local::true to=return::value;
+#call core::exit;
+#call core::label name="ret_false";
+#call core::mov from=local::false to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="add" value=main::add;
+#call core::mod::export name="sub" value=main::sub;
+#call core::mod::export name="mul" value=main::mul;
+#call core::mod::export name="div" value=main::div;
+#call core::mod::export name="inc" value=main::inc;
+#call core::mod::export name="dec" value=main::dec;
+#call core::mod::export name="sum3" value=main::sum3;
+#call core::mod::export name="avg2" value=main::avg2;
+#call core::mod::export name="abs" value=main::abs;
+#call core::mod::export name="sign" value=main::sign;
+#call core::mod::export name="is_positive" value=main::is_positive;
+#call core::mod::export name="is_negative" value=main::is_negative;
+#call core::mod::export name="min" value=main::min;
+#call core::mod::export name="max" value=main::max;
+#call core::mod::export name="clamp" value=main::clamp;
+#call core::mod::export name="between" value=main::between;
+#call core::exit;

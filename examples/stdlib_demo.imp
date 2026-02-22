@@ -1,0 +1,12 @@
+#call core::import alias="std" path="../stdlib/prelude.imp";
+
+#call core::const out=local::x value=-3;
+#call std::abs args="local::x" out=local::absx;
+
+#call core::const out=local::low value=0;
+#call core::const out=local::high value=2;
+#call std::clamp args="local::absx,local::low,local::high" out=local::clamped;
+
+#call std::print args="local::clamped" out=local::printed;
+#call core::mov from=local::printed to=return::value;
+#call core::exit;

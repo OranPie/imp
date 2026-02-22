@@ -1,0 +1,20 @@
+[workspace]
+members = [
+  "crates/imp-ast",
+  "crates/imp-ir",
+  "crates/imp-std",
+  "crates/imp-compiler",
+  "crates/imp-vm",
+  "crates/imp-cli",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"

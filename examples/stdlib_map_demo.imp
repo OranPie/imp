@@ -1,0 +1,13 @@
+#call core::import alias="std_map" path="../stdlib/map.imp";
+#call core::import alias="std_str" path="../stdlib/string.imp";
+
+#call std_map::new out=local::profile;
+#call core::const out=local::name value="imp";
+#call core::obj::set obj=local::profile key="name" value=local::name out=local::profile;
+#call core::const out=local::key value="name";
+#call core::const out=local::fallback value="unknown";
+#call std_map::get_or args="local::profile,local::key,local::fallback" out=local::v;
+#call core::const out=local::suffix value=" language";
+#call std_str::concat args="local::v,local::suffix" out=local::label;
+#call core::mov from=local::label to=return::value;
+#call core::exit;

@@ -1,0 +1,39 @@
+#call core::fn::begin name=main::point2 args="x,y" retshape="scalar";
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key="x" value=arg::x out=local::obj;
+#call core::obj::set obj=local::obj key="y" value=arg::y out=local::obj;
+#call core::mov from=local::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::pair args="first,second" retshape="scalar";
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key="first" value=arg::first out=local::obj;
+#call core::obj::set obj=local::obj key="second" value=arg::second out=local::obj;
+#call core::mov from=local::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::result_ok args="value" retshape="scalar";
+#call core::const out=local::ok value=true;
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key="ok" value=local::ok out=local::obj;
+#call core::obj::set obj=local::obj key="value" value=arg::value out=local::obj;
+#call core::mov from=local::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::result_err args="message" retshape="scalar";
+#call core::const out=local::ok value=false;
+#call core::obj::new out=local::obj;
+#call core::obj::set obj=local::obj key="ok" value=local::ok out=local::obj;
+#call core::obj::set obj=local::obj key="error" value=arg::message out=local::obj;
+#call core::mov from=local::obj to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="point2" value=main::point2;
+#call core::mod::export name="pair" value=main::pair;
+#call core::mod::export name="result_ok" value=main::result_ok;
+#call core::mod::export name="result_err" value=main::result_err;
+#call core::exit;

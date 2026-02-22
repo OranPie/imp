@@ -1,0 +1,18 @@
+[package]
+name = "imp-vm"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+imp-ir = { path = "../imp-ir" }
+
+[dev-dependencies]
+criterion = "0.5"
+imp-compiler = { path = "../imp-compiler" }
+
+[[bench]]
+name = "vm_bench"
+harness = false
+
+[lints]
+workspace = true

@@ -1,0 +1,11 @@
+#call core::import alias="std_res" path="../stdlib/result.imp";
+#call core::import alias="std_math" path="../stdlib/math.imp";
+
+#call core::const out=local::x value=20;
+#call core::const out=local::y value=22;
+#call std_math::add args="local::x,local::y" out=local::sum;
+#call std_res::ok args="local::sum" out=local::r;
+#call core::const out=local::fallback value=0;
+#call std_res::unwrap_or args="local::r,local::fallback" out=local::value;
+#call core::mov from=local::value to=return::value;
+#call core::exit;

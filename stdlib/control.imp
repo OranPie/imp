@@ -1,0 +1,63 @@
+#call core::fn::begin name=main::if_else args="cond,when_true,when_false" retshape="scalar";
+#call core::br cond=arg::cond then="ret_true" else="ret_false";
+#call core::label name="ret_true";
+#call core::mov from=arg::when_true to=return::value;
+#call core::exit;
+#call core::label name="ret_false";
+#call core::mov from=arg::when_false to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::coalesce args="value,fallback" retshape="scalar";
+#call core::const out=local::null value=null;
+#call core::eq a=arg::value b=local::null out=local::is_null;
+#call core::br cond=local::is_null then="ret_fallback" else="ret_value";
+#call core::label name="ret_fallback";
+#call core::mov from=arg::fallback to=return::value;
+#call core::exit;
+#call core::label name="ret_value";
+#call core::mov from=arg::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::require_not_null args="value,msg" retshape="scalar";
+#call core::const out=local::null value=null;
+#call core::eq a=arg::value b=local::null out=local::is_null;
+#call core::br cond=local::is_null then="throw" else="ret_value";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="null_error" msg="value is null";
+#call core::label name="ret_value";
+#call core::mov from=arg::value to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::assert_true args="cond,msg" retshape="scalar";
+#call core::const out=local::true value=true;
+#call core::br cond=arg::cond then="ret_true" else="throw";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="assert_true" msg="assert_true failed";
+#call core::label name="ret_true";
+#call core::mov from=local::true to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::assert_eq args="a,b,msg" retshape="scalar";
+#call core::const out=local::true value=true;
+#call core::eq a=arg::a b=arg::b out=local::ok;
+#call core::br cond=local::ok then="ret_true" else="throw";
+#call core::label name="throw";
+#call core::host::print value=arg::msg;
+#call core::throw code="assert_eq" msg="assert_eq failed";
+#call core::label name="ret_true";
+#call core::mov from=local::true to=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="if_else" value=main::if_else;
+#call core::mod::export name="coalesce" value=main::coalesce;
+#call core::mod::export name="require_not_null" value=main::require_not_null;
+#call core::mod::export name="assert_true" value=main::assert_true;
+#call core::mod::export name="assert_eq" value=main::assert_eq;
+#call core::exit;

@@ -1,0 +1,34 @@
+#call core::fn::begin name=main::concat args="a,b" retshape="scalar";
+#call core::str::concat a=arg::a b=arg::b out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::concat3 args="a,b,c" retshape="scalar";
+#call core::str::concat a=arg::a b=arg::b out=local::ab;
+#call core::str::concat a=local::ab b=arg::c out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::len args="value" retshape="scalar";
+#call core::str::len value=arg::value out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::is_empty args="value" retshape="scalar";
+#call core::const out=local::zero value=0;
+#call core::str::len value=arg::value out=local::count;
+#call core::eq a=local::count b=local::zero out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::fn::begin name=main::prefix args="label,value" retshape="scalar";
+#call core::str::concat a=arg::label b=arg::value out=return::value;
+#call core::exit;
+#call core::fn::end;
+
+#call core::mod::export name="concat" value=main::concat;
+#call core::mod::export name="concat3" value=main::concat3;
+#call core::mod::export name="len" value=main::len;
+#call core::mod::export name="is_empty" value=main::is_empty;
+#call core::mod::export name="prefix" value=main::prefix;
+#call core::exit;
