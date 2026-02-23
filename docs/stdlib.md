@@ -74,5 +74,7 @@ Legacy/simple examples still available:
 
 ## See also
 
+- `docs/programming.md` - end-to-end language usage guide.
 - `docs/stdlib_reference.md` - full API list.
 - `docs/stdlib_cookbook.md` - practical composition recipes.
+- `docs/zh-cn/README.md` - Chinese docs index.

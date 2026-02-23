@@ -81,3 +81,8 @@
 - `imp run <file.imp|file.impc> [--strict-bytecode]`
 - `imp dump-ir <file.imp|file.impc> [--strict-bytecode]`
 - `imp build <file.imp> [-o out.impc]`
+
+## See also
+
+- `docs/programming.md`
+- `docs/zh-cn/README.md`

@@ -39,8 +39,12 @@ cargo bench -p imp-vm --bench vm_bench
 
 ## Docs
 
+- `docs/programming.md`
 - `docs/spec-v2.md`
 - `docs/stdlib.md`
 - `docs/stdlib_reference.md`
 - `docs/stdlib_cookbook.md`
 - `docs/benchmarks.md`
+- `docs/zh-cn/README.md` (中文入口)
+- `docs/zh-cn/stdlib_reference.md`
+- `docs/zh-cn/stdlib_cookbook.md`
